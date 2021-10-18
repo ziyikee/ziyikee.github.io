@@ -16,21 +16,23 @@
   <meta name="description" content="">
   <meta name="author" content="ziyikee">
   <meta name="keywords" content="java">
-  <meta name="description" content="剑指 Offer32-I.从上到下打印二叉树 题目要求： 从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印. 例如：给定二叉树[3,9,20,null,null,15,7]     3    &#x2F; \   9  20      &#x2F; \     15 7   返回：[3,9,20,15,7] 题目分析:  对二叉树进行打印实际就是对其进行遍历，根据题目要求，同一层节点按照从左到右的顺">
+  <meta name="description" content="自旋锁1.提出背景：​    由于多处理器环境中，某些资源的有限性，对于多个线程共享的资源进行访问时，需要进行互斥访问，便需要引入锁的概念，只有获取了锁的线程才可以对资源进行访问，由于多线程的核心是CPU的时间分片，所以同一时刻只能有一个线程获取锁。 ​    当锁没有被占用时，尝试获取锁的线程成功获取到锁，之后若有另外的线程尝试获取锁，通常有两种处理方式： ​        1.没有获取到锁的线">
 <meta property="og:type" content="article">
-<meta property="og:title" content="剑指32-1">
-<meta property="og:url" content="http://example.com/2021/09/24/%E5%89%91%E6%8C%8732-1/index.html">
+<meta property="og:title" content="自旋锁">
+<meta property="og:url" content="http://example.com/2021/10/18/%E8%87%AA%E6%97%8B%E9%94%81/index.html">
 <meta property="og:site_name" content="Blog by ziyikee">
-<meta property="og:description" content="剑指 Offer32-I.从上到下打印二叉树 题目要求： 从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印. 例如：给定二叉树[3,9,20,null,null,15,7]     3    &#x2F; \   9  20      &#x2F; \     15 7   返回：[3,9,20,15,7] 题目分析:  对二叉树进行打印实际就是对其进行遍历，根据题目要求，同一层节点按照从左到右的顺">
+<meta property="og:description" content="自旋锁1.提出背景：​    由于多处理器环境中，某些资源的有限性，对于多个线程共享的资源进行访问时，需要进行互斥访问，便需要引入锁的概念，只有获取了锁的线程才可以对资源进行访问，由于多线程的核心是CPU的时间分片，所以同一时刻只能有一个线程获取锁。 ​    当锁没有被占用时，尝试获取锁的线程成功获取到锁，之后若有另外的线程尝试获取锁，通常有两种处理方式： ​        1.没有获取到锁的线">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-09-24T15:45:54.000Z">
-<meta property="article:modified_time" content="2021-09-24T15:56:31.051Z">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/1515111/201910/1515111-20191015194619321-127153615.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210704161013832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjA5NzEwOA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-10-18T05:25:34.000Z">
+<meta property="article:modified_time" content="2021-10-18T06:22:25.900Z">
 <meta property="article:author" content="ziyikee">
-<meta property="article:tag" content="刷题笔记">
-<meta property="article:tag" content="二叉树">
+<meta property="article:tag" content="OS">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/1515111/201910/1515111-20191015194619321-127153615.jpg">
   
-  <title>剑指32-1 - Blog by ziyikee</title>
+  <title>自旋锁 - Blog by ziyikee</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -176,7 +178,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="剑指32-1">
+            <span class="h2" id="subtitle" title="自旋锁">
               
             </span>
 
@@ -191,8 +193,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-09-24 23:45" pubdate>
-        2021年9月24日 晚上
+      <time datetime="2021-10-18 13:25" pubdate>
+        2021年10月18日 下午
       </time>
     </span>
   
@@ -202,7 +204,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.3k 字
     </span>
   
 
@@ -211,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3 分钟
+      4 分钟
     </span>
   
 
@@ -248,67 +250,38 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">剑指32-1</h1>
+            <h1 style="display: none">自旋锁</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年9月24日 晚上
+                  本文最后更新于：2021年10月18日 下午
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="剑指-Offer32-I-从上到下打印二叉树"><a href="#剑指-Offer32-I-从上到下打印二叉树" class="headerlink" title="剑指 Offer32-I.从上到下打印二叉树"></a>剑指 Offer32-I.从上到下打印二叉树</h1><hr>
-<p><strong>题目要求：</strong></p>
-<p>从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印.</p>
-<p>例如：给定二叉树[3,9,20,null,null,15,7]</p>
-<pre><code>    3
-   / \
-  9  20
-     / \
-    15 7 
-</code></pre>
-<p>返回：[3,9,20,15,7]</p>
-<p><strong>题目分析:</strong></p>
-<ul>
-<li>对二叉树进行打印实际就是对其进行遍历，根据题目要求，同一层节点按照从左到右的顺序进行遍历，所以应采用层序遍历的方法去遍历。</li>
-<li>层序遍历：借助队列进行实现，要保证读取当前节点后，接下里读取器左右节点，然后是左子节点的左右节点，然后是右子节点的左右节点。起初思路有些错误，想通过递归去进行读取，但是递归一旦深入到一棵子树中，便会继续深入下去，是无法返回保证按层读取的，实际上并不需要递归处理。</li>
-<li>通过队列实现层序遍历：首先将根节点加入队列，然后当队列不为空时进入循环，每一次循环，取出队列头结点，并读取节点数据，然后将其左右节点加入队列（子节点不为空），这样的话，下一次左子节点从队列头取出，同时将其左右子节点加入队列，这样就保证了队列中的数据顺序是按照层序遍历的顺序弹出的。</li>
-<li>注意事项：针对根节点为空，做出针对处理。队列集合对象为Integer,先用Integer数组保存数据，然后转化成int[],返回数组。</li>
+              <h1 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h1><h2 id="1-提出背景："><a href="#1-提出背景：" class="headerlink" title="1.提出背景："></a>1.提出背景：</h2><p>​    由于多处理器环境中，某些资源的有限性，对于多个线程共享的资源进行访问时，需要进行互斥访问，便需要引入锁的概念，只有获取了锁的线程才可以对资源进行访问，由于多线程的核心是CPU的时间分片，所以同一时刻只能有一个线程获取锁。</p>
+<p>​    当锁没有被占用时，尝试获取锁的线程成功获取到锁，之后若有另外的线程尝试获取锁，通常有两种处理方式：</p>
+<p>​        1.没有获取到锁的线程就一直循环等待判断该资源是否已经释放锁，这种锁叫做自旋锁。</p>
+<p>​        2.没有获取到锁的线程将自己阻塞起来，等待重新调度请求，这种锁叫互斥锁。</p>
+<h2 id="2-自旋锁的定义"><a href="#2-自旋锁的定义" class="headerlink" title="2.自旋锁的定义"></a>2.自旋锁的定义</h2><p>​    自旋锁的定义：当一个线程尝试去获取某一把锁的时候，如果这个锁此时已经被别人获取(占用)，那么此线程就无法获取到这把锁，该线程将会等待，间隔一段时间后会再次尝试获取。这种采用循环加锁 -&gt; 等待的机制被称为<code>自旋锁(spinlock)</code>。<img src="https://img2018.cnblogs.com/blog/1515111/201910/1515111-20191015194619321-127153615.jpg" srcset="/img/loading.gif" lazyload alt="自旋锁常见实现过程"></p>
+<h2 id="3-自旋锁的原理"><a href="#3-自旋锁的原理" class="headerlink" title="3.自旋锁的原理"></a>3.自旋锁的原理</h2><p>​    如果持有锁的线程能在短时间内释放资源，那么那些等待竞争锁的线程就不需要进行内核态和用户态之间的切换进入阻塞状态，只需要等待锁的释放（自旋一小段时间），等到持有锁的线程释放锁之后即可获取到锁，这样做的好处是避免了用户进程和内核态切换的消耗。</p>
+<p>​    自旋锁适用于临界区代码执行时间较短的情况，其他竞争线程只需要等待一小会儿便可以获取到锁，而不用在操作系统的调度下进入阻塞状态然后再切换回来，减少了上下文切换的次数，因此获取自旋锁的进程实际上一直处于用户态，并未进行用户态与内核态的切换。但如果获取锁的线程需要长时间的占用锁，则此时使用自旋锁的效率并不高，大量线程竞争一个锁，会导致获取锁的时间很长，线程自旋的消耗大于线程阻塞挂起的消耗，其他需要CPU的线程有不能获取到CPU，会造成CPU的浪费。</p>
+<p>​    自旋锁广泛的应用于操作系统内核，是一种轻量级的互斥锁，但是未申请到锁的线程不会被挂起，而是进入忙等待状态。</p>
+<p>​    重点：自旋锁在使用是会自动禁止抢占，这也是为什么不会被操作系统调度的原因，因此如果一个线程一直在自旋等待锁被释放，那么这段时间他还是一直在占用CPU，其他的线程无法抢占他的CPU。</p>
+<h2 id="4-使用自旋锁的注意事项"><a href="#4-使用自旋锁的注意事项" class="headerlink" title="4.使用自旋锁的注意事项"></a>4.使用自旋锁的注意事项</h2><ul>
+<li><p>不应用于长时间加锁</p>
+</li>
+<li><p>被自旋锁保护的临界区不能调用引起睡眠和阻塞的API函数，否则会造成死锁：</p>
+<p>如果线程 A 在持有锁期间进入了休眠状态，那么线程 A 会自动放弃 CPU 使用权。线程 B 开始运行，线程 B 也想要获取锁，但是此时锁被 A 线程持有，而且内核抢占还被禁止了！线程 B 无法被调度出去，那么线程 A 就无法运行，锁也就无法释放，好了，死锁发生了！</p>
+</li>
+<li><p>不能递归申请自旋锁，因为一旦通过递归的方式申请一个你正在持有的锁，那么你就必须“自旋”，等待锁被释放，然而你正处于“自旋”状态，根本没法释放锁。结果就是自己把自己锁死了！</p>
+</li>
+<li><p>在获取锁之前一定要进行之本地中断（当前CPU中断）</p>
+<p>中断中可以使用自旋锁，但是在进入自旋锁的临界区后，又发生了中断，此时新的中断尝试获取锁，但锁正在被原中断持有，现中断无法获取锁，原中断又被打断，无法释放锁，则会造成死锁。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210704161013832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjA5NzEwOA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="本地中断导致死锁"></p>
+</li>
 </ul>
-<p><strong>代码实现：</strong></p>
-<pre><code>class Solution &#123;
-
-ArrayList&lt;Integer&gt; b = new ArrayList&lt;Integer&gt;(1004);
-Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;(1004);
-public int[] levelOrder(TreeNode root) &#123;
-    if(root == null) &#123;
-        int[] a = new int[0];
-        return a;
-    &#125;
-    q.add(root);
-    int i = 0;
-    TreeNode tem  =  new TreeNode(0) ;
-    while(!(q.isEmpty()))&#123;
-        tem = q.remove();
-        b.add(tem.val);
-        if(tem.left != null)&#123;
-            q.add(tem.left);
-        &#125;
-        if(tem.right != null)&#123;
-            q.add(tem.right);
-        &#125;
-    &#125;
-    int[] a = new int[b.size()];
-    Iterator&lt;Integer&gt; in = b.iterator();
-    while(in.hasNext())&#123;
-        a[i++] = in.next();
-    &#125;
-    return a;
-    &#125;
-&#125;
-</code></pre>
-<p>通过本题主要复习一下使用队列进行层序遍历，以及熟悉Markdown写法。</p>
-
+<h2 id="5-具体实现例子待补充……"><a href="#5-具体实现例子待补充……" class="headerlink" title="5.具体实现例子待补充…….."></a>5.具体实现例子待补充……..</h2><h2 id="6-参考链接（纯搬砖）"><a href="#6-参考链接（纯搬砖）" class="headerlink" title="6.参考链接（纯搬砖）"></a>6.参考链接（纯搬砖）</h2>
             </div>
             <hr>
             <div>
@@ -318,9 +291,7 @@ public int[] levelOrder(TreeNode root) &#123;
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/">刷题笔记</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a>
+                      <a class="hover-with-bg" href="/tags/OS/">OS</a>
                     
                   </div>
                 
@@ -337,18 +308,12 @@ public int[] levelOrder(TreeNode root) &#123;
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/10/18/%E8%87%AA%E6%97%8B%E9%94%81/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">自旋锁</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/09/19/hello-world/">
-                        <span class="hidden-mobile">Hello World</span>
+                      <a href="/2021/09/24/%E5%89%91%E6%8C%8732-1/">
+                        <span class="hidden-mobile">剑指32-1</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
