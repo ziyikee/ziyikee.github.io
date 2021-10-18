@@ -261,12 +261,12 @@
 <p><strong>题目要求：</strong></p>
 <p>从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印.</p>
 <p>例如：给定二叉树[3,9,20,null,null,15,7]</p>
-<pre><code>    3
+<div class="hljs code-wrapper"><pre><code>    3
    / \
   9  20
      / \
     15 7 
-</code></pre>
+</code></pre></div>
 <p>返回：[3,9,20,15,7]</p>
 <p><strong>题目分析:</strong></p>
 <ul>
@@ -276,7 +276,7 @@
 <li>注意事项：针对根节点为空，做出针对处理。队列集合对象为Integer,先用Integer数组保存数据，然后转化成int[],返回数组。</li>
 </ul>
 <p><strong>代码实现：</strong></p>
-<pre><code>class Solution &#123;
+<div class="hljs code-wrapper"><pre><code>class Solution &#123;
 
 ArrayList&lt;Integer&gt; b = new ArrayList&lt;Integer&gt;(1004);
 Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;(1004);
@@ -306,7 +306,7 @@ public int[] levelOrder(TreeNode root) &#123;
     return a;
     &#125;
 &#125;
-</code></pre>
+</code></pre></div>
 <p>通过本题主要复习一下使用队列进行层序遍历，以及熟悉Markdown写法。</p>
 
             </div>
