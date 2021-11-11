@@ -22,34 +22,20 @@
   <meta name="description" content="zyk的个人博客">
   <meta name="author" content="ziyikee">
   <meta name="keywords" content="java">
-  <meta name="description" content="Redis安装与配置 首先通过ssh远程连接服务器或在虚拟机中安装  执行命令：wget https:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-6.2.6.tar.gz，下载压缩包到本地&#x2F;opt目录下，如图：    执行命令:tar  -zxvf  redis-6.2.6.tat.gz ,将压缩包解压大当前目录  解压完成之后，可进入解压目录查看当前文件：  其中red">
+  <meta name="description" content="Redis基础基础操作 redis默认有16个数据库，在redis.conf中由database 16标识 默认使用第0个数据库，可以使用select num切换数据库 选择数据库后，使用命令DBSIZE可查看当前库中的数据量 keys *,查看当前库中的所有key的name flushdb  清除当前库；FLUSHALL  清空全部数据库内容 EXIST  [key-name],判断一个key是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="二.Redis安装配置">
-<meta property="og:url" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:title" content="Redis基础">
+<meta property="og:url" content="https://ziyikee.fun/2021/11/10/Redis%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="Blog by ziyikee">
-<meta property="og:description" content="Redis安装与配置 首先通过ssh远程连接服务器或在虚拟机中安装  执行命令：wget https:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-6.2.6.tar.gz，下载压缩包到本地&#x2F;opt目录下，如图：    执行命令:tar  -zxvf  redis-6.2.6.tat.gz ,将压缩包解压大当前目录  解压完成之后，可进入解压目录查看当前文件：  其中red">
+<meta property="og:description" content="Redis基础基础操作 redis默认有16个数据库，在redis.conf中由database 16标识 默认使用第0个数据库，可以使用select num切换数据库 选择数据库后，使用命令DBSIZE可查看当前库中的数据量 keys *,查看当前库中的所有key的name flushdb  清除当前库；FLUSHALL  清空全部数据库内容 EXIST  [key-name],判断一个key是">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/1.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/2.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/3.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/4.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/5.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/6.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/7.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/8.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/9.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/10.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/11.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/13.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/12.png">
-<meta property="article:published_time" content="2021-11-10T06:51:19.000Z">
-<meta property="article:modified_time" content="2021-11-10T08:03:05.149Z">
+<meta property="article:published_time" content="2021-11-10T08:54:00.000Z">
+<meta property="article:modified_time" content="2021-11-10T14:11:40.770Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/1.png">
   
-  <title>二.Redis安装配置 - Blog by ziyikee</title>
+  <title>Redis基础 - Blog by ziyikee</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -211,7 +197,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="二.Redis安装配置">
+            <span class="h2" id="subtitle" title="Redis基础">
               
             </span>
 
@@ -226,7 +212,7 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-11-10 14:51" pubdate>
+      <time datetime="2021-11-10 16:54" pubdate>
         2021年11月10日 下午
       </time>
     </span>
@@ -237,7 +223,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      881 字
+      727 字
     </span>
   
 
@@ -246,7 +232,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3 分钟
+      2 分钟
     </span>
   
 
@@ -283,72 +269,37 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">二.Redis安装配置</h1>
+            <h1 style="display: none">Redis基础</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年11月10日 下午
+                  本文最后更新于：2021年11月10日 晚上
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="Redis安装与配置"><a href="#Redis安装与配置" class="headerlink" title="Redis安装与配置"></a>Redis安装与配置</h1><ol>
-<li><p>首先通过ssh远程连接服务器或在虚拟机中安装</p>
-</li>
-<li><p>执行命令：<code>wget https://download.redis.io/releases/redis-6.2.6.tar.gz</code>，下载压缩包到本地/opt目录下，如图：</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/1.png" srcset="/img/loading.gif" lazyload alt="1"></p>
-</li>
-<li><p> 执行命令:<code>tar  -zxvf  redis-6.2.6.tat.gz </code>,将压缩包解压大当前目录</p>
-</li>
-<li><p>解压完成之后，可进入解压目录查看当前文件：</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/2.png" srcset="/img/loading.gif" lazyload alt="2"></p>
-<p>其中<code>redis.conf</code>为配置文件</p>
-</li>
-<li><p>基本环境安装与redis安装：</p>
-<ul>
-<li><p><code>yum install gcc-c++ </code>   安装 gcc 编译工具</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/3.png" srcset="/img/loading.gif" lazyload alt="3"></p>
-</li>
-<li><p>在redis目录下执行<code>make</code>编译安装redis，可能会花费一定的时间，因为要安装一系列的环境</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/4.png" srcset="/img/loading.gif" lazyload alt="4"></p>
-<p><code>make</code>完成后会显示在src目录下增加了内容，可以继续使用<code>make</code>或<code>make install</code>进行检验，因为环境已经配置好，所以之后的<code>make</code>速度很快</p>
-</li>
-<li><p>redis的默认安装路径在<code>/usr/local/bin</code></p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/5.png" srcset="/img/loading.gif" lazyload alt="5"></p>
-</li>
+              <h1 id="Redis基础"><a href="#Redis基础" class="headerlink" title="Redis基础"></a>Redis基础</h1><h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><ul>
+<li>redis默认有16个数据库，在redis.conf中由<code>database 16</code>标识</li>
+<li>默认使用第0个数据库，可以使用<code>select num</code>切换数据库</li>
+<li>选择数据库后，使用命令<code>DBSIZE</code>可查看当前库中的数据量</li>
+<li><code>keys *</code>,查看当前库中的所有key的name</li>
+<li><code>flushdb</code>  清除当前库；<code>FLUSHALL</code>  清空全部数据库内容</li>
+<li><code>EXIST  [key-name]</code>,判断一个key是否存在，存在返回1，不存在返回0</li>
+<li><code>MOVE [key-name]</code>，移除一个key</li>
+<li><code>set  [key-name]  [key-value]</code>，为一个key设置具体值</li>
+<li><code>get  [key-name]</code>，获取key的具体值</li>
+<li><code>EXPIRE  [key-name]  [int]</code>，设置key的过期时间</li>
+<li><code>ttl  [key-name]</code>，查询key当前的剩余时间，过期之后get的值为nul</li>
+<li><code>type  [key-name]</code>，查看当前key的类型</li>
 </ul>
-</li>
-<li><p> 将redis的配置文件复制到当前的程序目录下，新建一个目录<code>kconfig</code>，保存配置文件</p>
-</li>
-</ol>
-<p>   <img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/6.png" srcset="/img/loading.gif" lazyload alt="6"></p>
-<ol start="7">
-<li> redis默认不是后台启动的，需要修改配置文件，使用<code>vim  redis.conf</code>修改配置文件，将图中的选项由<code>no</code>修改为’yes’</li>
-</ol>
-<p>   <img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/7.png" srcset="/img/loading.gif" lazyload alt="7"></p>
-<ol start="8">
-<li><p>经过上述配置之后，便可以启动redis服务，使用命令<code>redis-server /kconfig/redis.conf </code></p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/8.png" srcset="/img/loading.gif" lazyload alt="8"></p>
-</li>
-<li><p>启动redis客户端连接服务端，使用命令<code>redis-cli -p 6379</code>连接端口6379</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/9.png" srcset="/img/loading.gif" lazyload alt="9"></p>
-</li>
-<li><p>查看redis的进程运行状态，使用命令<code>ps -ef |grep redis</code></p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/10.png" srcset="/img/loading.gif" lazyload alt="10"></p>
-</li>
-<li><p>如何关闭redis服务？在客户端执行<code>shutdown</code>命令关闭服务器，执行<code>exit</code>退出客户端</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/11.png" srcset="/img/loading.gif" lazyload alt="11"></p>
-</li>
-</ol>
-<h1 id="redis-benchmark"><a href="#redis-benchmark" class="headerlink" title="redis-benchmark"></a>redis-benchmark</h1><p>​    官方自带的性能测试工具，如何使用? <code>redis-benchmark  [option]  [option value]</code>，该命令在redis的目录下执行，而不是客户端的内部之灵，具体参数如下：</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/13.png" srcset="/img/loading.gif" lazyload alt="12"></p>
-<p>简单测试：</p>
-<figure class="highlight apache"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs apache"><span class="hljs-comment"># 测试100个并发连接 100000个请求</span><br><span class="hljs-attribute">redis</span>-benchmark -h localhost -p <span class="hljs-number">6379</span> -c <span class="hljs-number">100</span> -n <span class="hljs-number">100000</span><br></code></pre></div></td></tr></table></figure>
-
-<p>测试结果与分析：</p>
-<p><img src="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/12.png" srcset="/img/loading.gif" lazyload alt="13"></p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/redis/redis-tutorial.html">Redis 教程 | 菜鸟教程 (runoob.com)</a></p>
-
+<h2 id="Redis是单线程的"><a href="#Redis是单线程的" class="headerlink" title="Redis是单线程的"></a>Redis是单线程的</h2><p>官方表示，Redis是基于内存操作，CPU不是Redis的性能瓶颈，Redis的瓶颈来源于机器的内存和网络带宽，既然可以使用单线程来实现，那就使用单线程。</p>
+<p>Redis是由C编写，官方数据说明Redis的QPS可达到100000+，完全不比同样是KV存储的Memcached差。</p>
+<h2 id="Redis为什么单线程还这么快？"><a href="#Redis为什么单线程还这么快？" class="headerlink" title="Redis为什么单线程还这么快？"></a>Redis为什么单线程还这么快？</h2><ul>
+<li>误区1：高性能的服务器一定是多线程的？</li>
+<li>误区2：多线程（存在CPU上下文切换成本）一定比单线程效率高？</li>
+<li>核心：Redis是将所有的数据全部放在内存中的，所以使用单线程去操作的效率就是最高的，多线程反而会由于CPU上下文切换产生耗时操作。对于内存系统来说，如果没有上下文切换，那效率就是最高的，多次读写都在一个CPU上，在数据保存在内存上是，单线程就是最佳方案！</li>
+</ul>
+<h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2>
             </div>
             <hr>
             <div>
@@ -379,7 +330,7 @@
                -->
               <p class="note note-warning">
                 <strong>本文作者: </strong><a href="/">ziyikee</a> <br>
-                <strong>本文链接: </strong><a href="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">https://ziyikee.fun/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</a> <br>
+                <strong>本文链接: </strong><a href="/2021/11/10/Redis%E5%9F%BA%E7%A1%80/">https://ziyikee.fun/2021/11/10/Redis%E5%9F%BA%E7%A1%80/</a> <br>
                 <!-- <strong>本文链接: </strong><a href="{{ url_for(page.path) }}" title="{{ page.title }}">{{ page.permalink }}</a> -->
                 <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                    </p>
@@ -389,9 +340,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/11/10/Redis%E5%9F%BA%E7%A1%80/">
+                      <a href="/2021/11/11/HUST%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E9%AA%8C/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Redis基础</span>
+                        <span class="hidden-mobile">HUST数据库实验</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -399,8 +350,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/11/09/Redis%E6%A6%82%E8%BF%B0/">
-                        <span class="hidden-mobile">一.Redis概述</span>
+                      <a href="/2021/11/10/Redis%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">
+                        <span class="hidden-mobile">二.Redis安装配置</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
