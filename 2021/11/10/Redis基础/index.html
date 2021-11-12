@@ -30,7 +30,7 @@
 <meta property="og:description" content="Redis基础基础操作 redis默认有16个数据库，在redis.conf中由database 16标识 默认使用第0个数据库，可以使用select num切换数据库 选择数据库后，使用命令DBSIZE可查看当前库中的数据量 keys *,查看当前库中的所有key的name flushdb  清除当前库；FLUSHALL  清空全部数据库内容 EXIST  [key-name],判断一个key是">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-11-10T08:54:00.000Z">
-<meta property="article:modified_time" content="2021-11-11T09:06:25.897Z">
+<meta property="article:modified_time" content="2021-11-11T14:55:10.171Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      727 字
+      720 字
     </span>
   
 
@@ -273,7 +273,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年11月11日 下午
+                  本文最后更新于：2021年11月11日 晚上
                 
               </p>
             
@@ -299,7 +299,7 @@
 <li>误区2：多线程（存在CPU上下文切换成本）一定比单线程效率高？</li>
 <li>核心：Redis是将所有的数据全部放在内存中的，所以使用单线程去操作的效率就是最高的，多线程反而会由于CPU上下文切换产生耗时操作。对于内存系统来说，如果没有上下文切换，那效率就是最高的，多次读写都在一个CPU上，在数据保存在内存上是，单线程就是最佳方案！</li>
 </ul>
-<h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2>
+
             </div>
             <hr>
             <div>
