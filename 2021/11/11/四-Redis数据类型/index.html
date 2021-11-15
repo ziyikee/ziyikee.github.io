@@ -30,7 +30,7 @@
 <meta property="og:description" content="Redis数据类型一.String字符串类型1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-11-11T14:56:14.000Z">
-<meta property="article:modified_time" content="2021-11-12T04:35:46.654Z">
+<meta property="article:modified_time" content="2021-11-14T09:36:04.366Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.9k 字
+      6.6k 字
     </span>
   
 
@@ -232,7 +232,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12 分钟
+      20 分钟
     </span>
   
 
@@ -273,7 +273,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年11月12日 下午
+                  本文最后更新于：2021年11月14日 下午
                 
               </p>
             
@@ -287,6 +287,43 @@
 <li>粉丝数</li>
 <li>对象缓存存储</li>
 </ul>
+<h2 id="二-List类型"><a href="#二-List类型" class="headerlink" title="二.List类型"></a>二.List类型</h2><p>在redis中，list可以当做栈，队列，双端队列，或阻塞队列来使用</p>
+<p>所有有关list的命令，都是字母’L’开头的</p>
+<p>基本命令使用：</p>
+<figure class="highlight xquery"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs xquery">key为操作的列表的名字<br>- LPUSH<span class="hljs-built_in"> key</span> <span class="hljs-keyword">value</span> [<span class="hljs-keyword">value</span>....]   从队列的左边入队一个或多个元素<br>ps: 在队列中，编号是从左到右为<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>，如果前面LPUSH一个元素后，他的编号为<span class="hljs-number">0</span>，继续LPUSH一个元素，此时他的编号变成了<span class="hljs-number">1</span><br>- LPUSHX<span class="hljs-built_in"> key</span> <span class="hljs-keyword">value</span>	如果队列存在，从队列的左边入队一个元素<br>- LRANGE<span class="hljs-built_in"> key</span> <span class="hljs-keyword">start</span> <span class="hljs-keyword">end</span>	从列表中取出指定编号范围内的元素，<span class="hljs-number">0</span>，-<span class="hljs-number">1</span>为取出所有<br>- LREM<span class="hljs-built_in"> key</span><span class="hljs-built_in"> count</span> <span class="hljs-keyword">value</span>	从列表中删除元素，注意元素的<span class="hljs-keyword">value</span>必须明确指定<span class="hljs-built_in">，count</span>为删除的<span class="hljs-keyword">value</span>的个数<br>- LSET<span class="hljs-built_in"> key</span> index <span class="hljs-keyword">value</span>	设置列表中编号为index的元素的值<br>- LTRIM<span class="hljs-built_in"> key</span> <span class="hljs-keyword">start</span> <span class="hljs-keyword">end</span>	修建指定范围内的数据，语句执行结束后，原来<span class="hljs-built_in">的key</span>中只保存范围内的值，其他的都被删除<br>- RPOP<span class="hljs-built_in"> key</span>	从队列的右边出队一个元素<br>- RPOPLPUSH source destination 删除source列表中最后一个元素(pop出最右边的)，并追加到另一个列表(并加到另一个队列左边)<br>- RPUSH<span class="hljs-built_in"> key</span> <span class="hljs-keyword">value</span> [<span class="hljs-keyword">value</span>....] 从队列的右边入队一个或多个元素<br>- RPUSHX<span class="hljs-built_in"> key</span> <span class="hljs-keyword">value</span> 如果队列存在，从队列的右边入队一个元素<br>- LLEN<span class="hljs-built_in"> key</span> 获取列<span class="hljs-built_in">表key</span>的元素个数<br>- LINSERT<span class="hljs-built_in"> key</span> [BEFORE/AFTER] pivot <span class="hljs-keyword">value</span> 在列<span class="hljs-built_in">表key</span>的元素pivot前面或后面插入元素<span class="hljs-keyword">value</span><br></code></pre></div></td></tr></table></figure>
+
+<p>如果key不存在，push时创建列表</p>
+<p>如果移除了key的所有值，key为空链表，也相当于不存在</p>
+<p>在llist的两边插入或改动元素时，效率最高，修改中间元素或插到中间，效率相低</p>
+<p>适用场景：消息排队，消息队列(LPUSH,RPOP)，栈(LPUSH,LPOP)</p>
+<h2 id="三-Set类型"><a href="#三-Set类型" class="headerlink" title="三.Set类型"></a>三.Set类型</h2><p>与java中的set类似，不允许元素重复</p>
+<p>与set相关的命令，都以字母‘S’开头</p>
+<p>基本命令：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs maxima">- SADD <span class="hljs-built_in">key</span> <span class="hljs-built_in">member</span> [<span class="hljs-built_in">member</span>...]	添加一个或多个元素到集合中<br>- SCARD <span class="hljs-built_in">key</span>	获取集合中的元素数量<br>- SISMEMBER <span class="hljs-built_in">key</span> <span class="hljs-built_in">member</span> 判断<span class="hljs-built_in">member</span>元素是否在集合<span class="hljs-built_in">key</span>中<br>- SMEMBERS <span class="hljs-built_in">key</span>	获取集合中的所有元素<br>- SMOVE source destination <span class="hljs-built_in">member</span>	把集合source中的一个元素<span class="hljs-built_in">member</span>移动到另一个集合中，source中将不再有该<span class="hljs-built_in">member</span><br>- SREM <span class="hljs-built_in">key</span> <span class="hljs-built_in">member</span> [<span class="hljs-built_in">member</span>...]	删除集合中的一个或多个元素<br>- SPOP <span class="hljs-built_in">key</span> [count]	删除并获取集合中的一个元素，由于元素时无序的，因此<span class="hljs-built_in">pop</span>出哪一个不知道，count指定个数<br>- SRANDMEMBER <span class="hljs-built_in">key</span> [count]	从集合中随机取获取一个元素<br>- SDIFF key1 key2 求key1与key2的差集，即key1中存在，但是key2中不存在的<br>- SINTER <span class="hljs-built_in">key</span> [<span class="hljs-built_in">key</span>...]	求集合间的交集<br>- SINTERSTORE destination <span class="hljs-built_in">key</span> [<span class="hljs-built_in">key</span>...]	求集合间的交集,并保存新集合destination中<br>- SUNION <span class="hljs-built_in">key</span> [<span class="hljs-built_in">key</span>...]	求集合间的并集<br>- SUNIONSTORE destination <span class="hljs-built_in">key</span> [<span class="hljs-built_in">key</span>...]	求集合间的并集,并保存新集合destination中<br></code></pre></div></td></tr></table></figure>
+
+<p>适用场景：</p>
+<p>微博中，将A用户的所有关注的人放在一个set集合中，将他的粉丝也放到一个集合中</p>
+<p>共同关注求交集，求推荐好友等</p>
+<h2 id="四-Hash-哈希"><a href="#四-Hash-哈希" class="headerlink" title="四.Hash(哈希)"></a>四.Hash(哈希)</h2><p>Map集合，key为一个集合，存放的元素为kv对</p>
+<p>和string的集合差不对，只不过string集合存放单个value，Map集合存放kv</p>
+<p>基本命令：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs gauss">- HSET <span class="hljs-built_in">key</span> field value	设置集合<span class="hljs-built_in">key</span>中的kv对<br>- HSETNX <span class="hljs-built_in">key</span> field value	如果当前的kv不存在，设置kv<br>- HMSET <span class="hljs-built_in">key</span> field value [field value....]	批量设置集合<span class="hljs-built_in">key</span>中的kv对<br>- HGET <span class="hljs-built_in">key</span> field	获取集合<span class="hljs-built_in">key</span>中键为field的value<br>- HGETALL <span class="hljs-built_in">key</span>	读取<span class="hljs-built_in">key</span>中的所有域和值，field和value都有<br>- HMGET <span class="hljs-built_in">key</span> field [field...]	批量获取集合<span class="hljs-built_in">key</span>中键为field的value<br>- HLEN <span class="hljs-built_in">key</span>	获取<span class="hljs-built_in">key</span>集合中所有字段的数量<br>- HKEYS <span class="hljs-built_in">key</span>	 获取<span class="hljs-built_in">key</span>中的所有field字段<br>- HVALS <span class="hljs-built_in">key</span>	 获取<span class="hljs-built_in">key</span>中的所有value值<br>- HEXISTS <span class="hljs-built_in">key</span> field   判断field是否存在于<span class="hljs-built_in">key</span>中<br>- HDEL <span class="hljs-built_in">key</span> field [field...]    删除一个或多个field，对应的value也会删除<br>- HINCRBY <span class="hljs-built_in">key</span> field increment	将<span class="hljs-built_in">key</span>中指定域的值(value)增加给定的数字<br>- HINCRBYFLOAT <span class="hljs-built_in">key</span> field increment	将<span class="hljs-built_in">key</span>中指定域的值(value)增加给定的浮点数<br></code></pre></div></td></tr></table></figure>
+
+<p>相对于String类型，hash更适合对象的存储，string更适合字符串的存储，当然也可以用string存储对象</p>
+<h2 id="五-Zset-有序集合"><a href="#五-Zset-有序集合" class="headerlink" title="五.Zset(有序集合)"></a>五.Zset(有序集合)</h2><p>在set的基础上，增加了一个score值     set key value    zset key  score  value</p>
+<p>基本命令:</p>
+<figure class="highlight maxima"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs maxima">- ZADD <span class="hljs-built_in">key</span> score <span class="hljs-built_in">member</span> [score <span class="hljs-built_in">member</span>....]添加一个或多个成员到一个有序的set，如果已经存在，那么更新分数<br>- ZCARD <span class="hljs-built_in">key</span>	  获取一个排序集合中成员的数量<br>- ZCOUNT <span class="hljs-built_in">key</span> <span class="hljs-built_in">min</span> <span class="hljs-built_in">max</span>	返回分数在指定范围内的成员数量<br>- ZINCRBY <span class="hljs-built_in">key</span> increment <span class="hljs-built_in">member</span>  将指定的成员的score增加increment<br>- ZRANGE <span class="hljs-built_in">key</span> start stop 根据指定的index返回范围内的成员<br>- ZRANK <span class="hljs-built_in">key</span> <span class="hljs-built_in">member</span> 返回<span class="hljs-built_in">member</span>在排序集合中的索引<br>- ZREM <span class="hljs-built_in">key</span> <span class="hljs-built_in">member</span> 删除一个成员<br></code></pre></div></td></tr></table></figure>
+
+<p>适用场景：</p>
+<p>对set排序，班级成绩，工资排序，带权重的成员，排行榜等等</p>
+<h2 id="六-三种特殊的类型"><a href="#六-三种特殊的类型" class="headerlink" title="六.三种特殊的类型"></a>六.三种特殊的类型</h2><ul>
+<li>Geospatial 地理位置类型</li>
+<li>Hyperlog 基数统计类型</li>
+<li>Bitmap 位图场景</li>
+</ul>
+<p>写吐了，需要用的时候还是查官方文档吧。。。🐶</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="http://www.redis.cn/">redis中文官方网站</a></p>
+<p><a target="_blank" rel="noopener" href="https://redis.io/commands">Command reference – Redis</a></p>
 
             </div>
             <hr>
@@ -327,6 +364,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/11/15/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">刷题记录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
