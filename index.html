@@ -253,6 +253,116 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/11/17/%E5%85%AD-Jedis%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          六.Jedis操作Redis
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/11/17/%E5%85%AD-Jedis%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          
+          
+            
+          
+          通过jedis包使用java操作redis
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-17 14:16" pubdate>
+              2021-11-17
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/11/16/%E4%BA%94-Redis%E4%BA%8B%E5%8A%A1/" target="_self">
+          五.Redis事务与乐观锁
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/11/16/%E4%BA%94-Redis%E4%BA%8B%E5%8A%A1/" target="_self">
+          
+          
+            
+          
+          Redis事务Redis事务本质：一组命令集合。一个事务中的所有命令都会被序列化，在事务执行过程中，会按照顺序执行。
+1|------队列 set set set....队列-------|
+
+Redis事务：
+
+开启事务（multi）
+命令入队列（一系列命令）
+执行事务（exec）
+
+所有的命令在事务中，并没有直接执行，而是只会在执行命令发起的时候才会执行。
+123456789101112131
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-16 23:13" pubdate>
+              2021-11-16
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/11/15/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" target="_self">
           刷题记录
         </a>
@@ -596,7 +706,7 @@ hexo -clean    清除旧文件
 hexo -g           生成最新
 hexo -d          提交
 hexo -s          启动本地预览
-ssh -T  &#x67;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;    验证是否与服务器
+ssh -T  &#x67;&#x69;&#116;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#46;&#99;&#111;&#x6d;    验证是否与服务器连接
         </a>
       </p>
 
@@ -606,110 +716,6 @@ ssh -T  &#x67;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&
             <i class="iconfont icon-date"></i>
             <time datetime="2021-11-09 17:35" pubdate>
               2021-11-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Hexo/">Hexo</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Hexo/">Hexo</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/11/06/hexo%E8%A7%A3%E5%86%B3%E5%9B%BE%E7%89%87%E9%93%BE%E6%8E%A5%E9%97%AE%E9%A2%98/" target="_self">
-          Hexo解决图片链接问题
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/11/06/hexo%E8%A7%A3%E5%86%B3%E5%9B%BE%E7%89%87%E9%93%BE%E6%8E%A5%E9%97%AE%E9%A2%98/" target="_self">
-          
-          
-            
-          
-          在使用 Hexo 撰写博文时，时常需要将图片嵌入 md 文章中，但往往由于图片保存在本地主机，因此在网页中链接图片时，会无法获取本地主机的图片，导致图片不正常显示，在这里我通过使用Hexo插件的方式，保证图片可以正常上传。
-
-首先安装一个图片路径转换的插件：hexo-asset-image，在Hexo主文件夹下使用如下命令：
-npm install https://github.com/CodeF
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-11-06 14:58" pubdate>
-              2021-11-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Hexo/">Hexo</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Hexo/">Hexo</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/10/23/add-domain/" target="_self">
-          Add Domain
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/10/23/add-domain/" target="_self">
-          
-          
-            
-          
-          域名添加​    在成功配置好博客并部署在github上之后，我们可以通过xxxxx.github.io的方式去访问博客，但是我想为自己的博客配置一个自己    的域名，例如本博客的域名：www.ziyikee.fun ,因此便需要去配置一个自己想要的域名。
-​    首先需要在阿里云或腾讯云等厂商那里去买一个域名，比如我的域名是在阿里云上购买的，在购买域名之后，本来以为需要对域名进行    备案
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-10-23 14:34" pubdate>
-              2021-10-23
             </time>
           </div>
         
