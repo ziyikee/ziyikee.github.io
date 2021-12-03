@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com.css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel = "stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/aa.png">
+  <link rel="icon" href="/img/aa.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="zyk的个人博客">
+  <meta name="author" content="ziyikee">
+  <meta name="keywords" content="java">
+  <meta name="description" content="转载自JavaGuide                          将来面试必然会遇到此类问题             分布式 ID分布式 ID 介绍何为 ID？日常开发中，我们需要对系统中的各种数据使用 ID 唯一表示，比如用户 ID 对应且仅对应一个人，商品 ID 对应且仅对应一件商品，订单 ID 对应且仅对应一个订单。  我们现实生活中也有各种 ID，比如身">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现分布式ID">
+<meta property="og:url" content="https://ziyikee.fun/2021/12/03/%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8FID/index.html">
+<meta property="og:site_name" content="Blog by ziyikee">
+<meta property="og:description" content="转载自JavaGuide                          将来面试必然会遇到此类问题             分布式 ID分布式 ID 介绍何为 ID？日常开发中，我们需要对系统中的各种数据使用 ID 唯一表示，比如用户 ID 对应且仅对应一个人，商品 ID 对应且仅对应一件商品，订单 ID 对应且仅对应一个订单。  我们现实生活中也有各种 ID，比如身">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/javaguide/up-79beb853b8319f850638c9708f83039dfda.png">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-d78d9d5362c71f4713a090baf7ec65d2b6d.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210610082309988.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210610081957287.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210610081149228.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021061008245858.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210207103320582.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210202110824430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0MzM3Mjcy,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210202113013477.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0MzM3Mjcy,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-a7e54a77b5ab1d9fa16d5ae3a3c50c5aee9.png">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-ad5b9dd0077a949db923611b2450277e406.png">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-358b1a4cddb3675018b8595f66ece9cae88.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210422145229617.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210422144846724.png">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-4afc0e45c0c86ba5ad645d023dce11e53c2.png">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-53f74cd615178046d6c04fe50513fee74ce.png">
+<meta property="article:published_time" content="2021-12-03T05:36:50.000Z">
+<meta property="article:modified_time" content="2021-12-03T05:41:16.203Z">
+<meta property="article:author" content="ziyikee">
+<meta property="article:tag" content="八股 分布式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/javaguide/up-79beb853b8319f850638c9708f83039dfda.png">
+  
+  <title>实现分布式ID - Blog by ziyikee</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ziyikee.fun","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"<-","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"41fc030db57d5570dd22f78997dc4a7e","google":"G-TKFRYZGQQM","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","app_key":"mkp5UxNkruz1T9ByVFewLjOi","server_url":"https://yax4vgrj.lc-cn-n1-shared.com","path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Blog by ziyikee.</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/a1.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="实现分布式ID">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      ziyikee
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-03 13:36" pubdate>
+        2021年12月3日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">实现分布式ID</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年12月3日 下午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <div class="note note-success">
+            <p>转载自<a target="_blank" rel="noopener" href="https://github.com/Snailclimb/JavaGuide/blob/main/docs/distributed-system/distributed-id.md">JavaGuide</a></p>
+          </div>
+
+<div class="note note-info">
+            <p>将来面试必然会遇到此类问题</p>
+          </div>
+
+<h1 id="分布式-ID"><a href="#分布式-ID" class="headerlink" title="分布式 ID"></a>分布式 ID</h1><h2 id="分布式-ID-介绍"><a href="#分布式-ID-介绍" class="headerlink" title="分布式 ID 介绍"></a>分布式 ID 介绍</h2><h3 id="何为-ID？"><a href="#何为-ID？" class="headerlink" title="何为 ID？"></a>何为 ID？</h3><p>日常开发中，我们需要对系统中的各种数据使用 ID 唯一表示，比如用户 ID 对应且仅对应一个人，商品 ID 对应且仅对应一件商品，订单 ID 对应且仅对应一个订单。</p>
+<p><img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/javaguide/up-79beb853b8319f850638c9708f83039dfda.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们现实生活中也有各种 ID，比如身份证 ID 对应且仅对应一个人、地址 ID 对应且仅对应</p>
+<p>简单来说，<strong>ID 就是数据的唯一标识</strong>。</p>
+<h3 id="何为分布式-ID？"><a href="#何为分布式-ID？" class="headerlink" title="何为分布式 ID？"></a>何为分布式 ID？</h3><p>分布式 ID 是分布式系统下的 ID。分布式 ID 不存在与现实生活中，属于计算机系统中的一个概念。</p>
+<p>我简单举一个分库分表的例子。</p>
+<p>我司的一个项目，使用的是单机 MySQL 。但是，没想到的是，项目上线一个月之后，随着使用人数越来越多，整个系统的数据量将越来越大。</p>
+<p>单机 MySQL 已经没办法支撑了，需要进行分库分表（推荐 Sharding-JDBC）。</p>
+<p>在分库之后， 数据遍布在不同服务器上的数据库，数据库的自增主键已经没办法满足生成的主键唯一了。<strong>我们如何为不同的数据节点生成全局唯一主键呢？</strong></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-d78d9d5362c71f4713a090baf7ec65d2b6d.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个时候就需要生成<strong>分布式 ID</strong>了。</p>
+<h3 id="分布式-ID-需要满足哪些要求"><a href="#分布式-ID-需要满足哪些要求" class="headerlink" title="分布式 ID 需要满足哪些要求?"></a>分布式 ID 需要满足哪些要求?</h3><p><img src="https://img-blog.csdnimg.cn/20210610082309988.png" srcset="/img/loading.gif" lazyload></p>
+<p>分布式 ID 作为分布式系统中必不可少的一环，很多地方都要用到分布式 ID。</p>
+<p>一个最基本的分布式 ID 需要满足下面这些要求：</p>
+<ul>
+<li><strong>全局唯一</strong> ：ID 的全局唯一性肯定是首先要满足的！</li>
+<li><strong>高性能</strong> ： 分布式 ID 的生成速度要快，对本地资源消耗要小。</li>
+<li><strong>高可用</strong> ：生成分布式 ID 的服务要保证可用性无限接近于 100%。</li>
+<li><strong>方便易用</strong> ：拿来即用，使用方便，快速接入！</li>
+</ul>
+<p>除了这些之外，一个比较好的分布式 ID 还应保证：</p>
+<ul>
+<li><strong>安全</strong> ：ID 中不包含敏感信息。</li>
+<li><strong>有序递增</strong> ：如果要把 ID 存放在数据库的话，ID 的有序性可以提升数据库写入速度。并且，很多时候 ，我们还很有可能会直接通过 ID 来进行排序。</li>
+<li><strong>有具体的业务含义</strong> ：生成的 ID 如果能有具体的业务含义，可以让定位问题以及开发更透明化（通过 ID 就能确定是哪个业务）。</li>
+<li><strong>独立部署</strong> ：也就是分布式系统单独有一个发号器服务，专门用来生成分布式 ID。这样就生成 ID 的服务可以和业务相关的服务解耦。不过，这样同样带来了网络调用消耗增加的问题。总的来说，如果需要用到分布式 ID 的场景比较多的话，独立部署的发号器服务还是很有必要的。</li>
+</ul>
+<h2 id="分布式-ID-常见解决方案"><a href="#分布式-ID-常见解决方案" class="headerlink" title="分布式 ID 常见解决方案"></a>分布式 ID 常见解决方案</h2><h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><h4 id="数据库主键自增"><a href="#数据库主键自增" class="headerlink" title="数据库主键自增"></a>数据库主键自增</h4><p>这种方式就比较简单直白了，就是通过关系型数据库的自增主键产生来唯一的 ID。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210610081957287.png" srcset="/img/loading.gif" lazyload></p>
+<p>以 MySQL 举例，我们通过下面的方式即可。</p>
+<p><strong>1.创建一个数据库表。</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `sequence_id` (<br>  `id` <span class="hljs-type">bigint</span>(<span class="hljs-number">20</span>) unsigned <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT,<br>  `stub` <span class="hljs-type">char</span>(<span class="hljs-number">10</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">&#x27;&#x27;</span>,<br>  <span class="hljs-keyword">PRIMARY</span> KEY (`id`),<br>  <span class="hljs-keyword">UNIQUE</span> KEY `stub` (`stub`)<br>) ENGINE<span class="hljs-operator">=</span>InnoDB <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8mb4;<br></code></pre></div></td></tr></table></figure>
+
+<p><code>stub</code> 字段无意义，只是为了占位，便于我们插入或者修改数据。并且，给 <code>stub</code> 字段创建了唯一索引，保证其唯一性。</p>
+<p><strong>2.通过 <code>replace into</code> 来插入数据。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">BEGIN;<br><span class="hljs-function">REPLACE INTO <span class="hljs-title">sequence_id</span> <span class="hljs-params">(stub)</span> <span class="hljs-title">VALUES</span> <span class="hljs-params">(<span class="hljs-string">&#x27;stub&#x27;</span>)</span></span>;<br><span class="hljs-function">SELECT <span class="hljs-title">LAST_INSERT_ID</span><span class="hljs-params">()</span></span>;<br>COMMIT;<br></code></pre></div></td></tr></table></figure>
+
+<p>插入数据这里，我们没有使用 <code>insert into</code> 而是使用 <code>replace into</code> 来插入数据，具体步骤是这样的：</p>
+<p>1)第一步： 尝试把数据插入到表中。</p>
+<p>2)第二步： 如果主键或唯一索引字段出现重复数据错误而插入失败时，先从表中删除含有重复关键字值的冲突行，然后再次尝试把数据插入到表中。</p>
+<p>这种方式的优缺点也比较明显：</p>
+<ul>
+<li><strong>优点</strong> ：实现起来比较简单、ID 有序递增、存储消耗空间小</li>
+<li><strong>缺点</strong> ： 支持的并发量不大、存在数据库单点问题（可以使用数据库集群解决，不过增加了复杂度）、ID 没有具体业务含义、安全问题（比如根据订单 ID 的递增规律就能推算出每天的订单量，商业机密啊！ ）、每次获取 ID 都要访问一次数据库（增加了对数据库的压力，获取速度也慢）</li>
+</ul>
+<h4 id="数据库号段模式"><a href="#数据库号段模式" class="headerlink" title="数据库号段模式"></a>数据库号段模式</h4><p>数据库主键自增这种模式，每次获取 ID 都要访问一次数据库，ID 需求比较大的时候，肯定是不行的。</p>
+<p>如果我们可以批量获取，然后存在在内存里面，需要用到的时候，直接从内存里面拿就舒服了！这也就是我们说的 <strong>基于数据库的号段模式来生成分布式 ID。</strong></p>
+<p>数据库的号段模式也是目前比较主流的一种分布式 ID 生成方式。像滴滴开源的<a target="_blank" rel="noopener" href="https://github.com/didi/tinyid/wiki/tinyid%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D">Tinyid</a> 就是基于这种方式来做的。不过，TinyId 使用了双号段缓存、增加多 db 支持等方式来进一步优化。</p>
+<p>以 MySQL 举例，我们通过下面的方式即可。</p>
+<p><strong>1.创建一个数据库表。</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `sequence_id_generator` (<br>  `id` <span class="hljs-type">int</span>(<span class="hljs-number">10</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `current_max_id` <span class="hljs-type">bigint</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;当前最大id&#x27;</span>,<br>  `step` <span class="hljs-type">int</span>(<span class="hljs-number">10</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;号段的长度&#x27;</span>,<br>  `version` <span class="hljs-type">int</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;版本号&#x27;</span>,<br>  `biz_type`    <span class="hljs-type">int</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;业务类型&#x27;</span>,<br>   <span class="hljs-keyword">PRIMARY</span> KEY (`id`)<br>) ENGINE<span class="hljs-operator">=</span>InnoDB <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8mb4;<br></code></pre></div></td></tr></table></figure>
+
+<p><code>current_max_id</code> 字段和<code>step</code>字段主要用于获取批量 ID，获取的批量 id 为： <code>current_max_id ~ current_max_id+step</code>。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210610081149228.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>version</code> 字段主要用于解决并发问题（乐观锁）,<code>biz_type</code> 主要用于表示业余类型。</p>
+<p><strong>2.先插入一行数据。</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> `sequence_id_generator` (`id`, `current_max_id`, `step`, `version`, `biz_type`)<br><span class="hljs-keyword">VALUES</span><br>	(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">0</span>, <span class="hljs-number">101</span>);<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>3.通过 SELECT 获取指定业务下的批量唯一 ID</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> `current_max_id`, `step`,`version` <span class="hljs-keyword">FROM</span> `sequence_id_generator` <span class="hljs-keyword">where</span> `biz_type` <span class="hljs-operator">=</span> <span class="hljs-number">101</span><br></code></pre></div></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight apache"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs apache"><span class="hljs-attribute">id</span>	current_max_id	step	version	biz_type<br><span class="hljs-attribute">1</span>	<span class="hljs-number">0</span>	<span class="hljs-number">100</span>	<span class="hljs-number">1</span>	<span class="hljs-number">101</span><br></code></pre></div></td></tr></table></figure>
+
+<p><strong>4.不够用的话，更新之后重新 SELECT 即可。</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs sql">UPDATE sequence_id_generator <span class="hljs-keyword">SET</span> current_max_id <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-operator">+</span><span class="hljs-number">100</span>, version<span class="hljs-operator">=</span>version<span class="hljs-operator">+</span><span class="hljs-number">1</span> <span class="hljs-keyword">WHERE</span> version <span class="hljs-operator">=</span> <span class="hljs-number">0</span>  <span class="hljs-keyword">AND</span> `biz_type` <span class="hljs-operator">=</span> <span class="hljs-number">101</span><br><span class="hljs-keyword">SELECT</span> `current_max_id`, `step`,`version` <span class="hljs-keyword">FROM</span> `sequence_id_generator` <span class="hljs-keyword">where</span> `biz_type` <span class="hljs-operator">=</span> <span class="hljs-number">101</span><br></code></pre></div></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight apache"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs apache"><span class="hljs-attribute">id</span>	current_max_id	step	version	biz_type<br><span class="hljs-attribute">1</span>	<span class="hljs-number">100</span>	<span class="hljs-number">100</span>	<span class="hljs-number">1</span>	<span class="hljs-number">101</span><br></code></pre></div></td></tr></table></figure>
+
+<p>相比于数据库主键自增的方式，<strong>数据库的号段模式对于数据库的访问次数更少，数据库压力更小。</strong></p>
+<p>另外，为了避免单点问题，你可以从使用主从模式来提高可用性。</p>
+<p><strong>数据库号段模式的优缺点:</strong></p>
+<ul>
+<li><strong>优点</strong> ：ID 有序递增、存储消耗空间小</li>
+<li><strong>缺点</strong> ：存在数据库单点问题（可以使用数据库集群解决，不过增加了复杂度）、ID 没有具体业务含义、安全问题（比如根据订单 ID 的递增规律就能推算出每天的订单量，商业机密啊！ ）</li>
+</ul>
+<h4 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h4><p><img src="https://img-blog.csdnimg.cn/2021061008245858.png" srcset="/img/loading.gif" lazyload></p>
+<p>一般情况下，NoSQL 方案使用 Redis 多一些。我们通过 Redis 的 <code>incr</code> 命令即可实现对 id 原子顺序递增。</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">127.0.0.1:6379&gt; <span class="hljs-built_in">set</span> sequence_id_biz_type 1<br>OK<br>127.0.0.1:6379&gt; incr sequence_id_biz_type<br>(<span class="hljs-built_in">integer</span>) 2<br>127.0.0.1:6379&gt; get sequence_id_biz_type<br><span class="hljs-string">&quot;2&quot;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>为了提高可用性和并发，我们可以使用 Redis Cluser。Redis Cluser 是 Redis 官方提供的 Redis 集群解决方案（3.0+版本）。</p>
+<p>除了 Redis Cluser 之外，你也可以使用开源的 Redis 集群方案<a target="_blank" rel="noopener" href="https://github.com/CodisLabs/codis">Codis</a> （大规模集群比如上百个节点的时候比较推荐）。</p>
+<p>除了高可用和并发之外，我们知道 Redis 基于内存，我们需要持久化数据，避免重启机器或者机器故障后数据丢失。Redis 支持两种不同的持久化方式：<strong>快照（snapshotting，RDB）</strong>、<strong>只追加文件（append-only file, AOF）</strong>。 并且，Redis 4.0 开始支持 <strong>RDB 和 AOF 的混合持久化</strong>（默认关闭，可以通过配置项 <code>aof-use-rdb-preamble</code> 开启）。</p>
+<p>关于 Redis 持久化，我这里就不过多介绍。不了解这部分内容的小伙伴，可以看看 <a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/database/Redis/redis-all">JavaGuide 对于 Redis 知识点的总结</a>。</p>
+<p><strong>Redis 方案的优缺点：</strong></p>
+<ul>
+<li><strong>优点</strong> ： 性能不错并且生成的 ID 是有序递增的</li>
+<li><strong>缺点</strong> ： 和数据库主键自增方案的缺点类似</li>
+</ul>
+<p>除了 Redis 之外，MongoDB ObjectId 经常也会被拿来当做分布式 ID 的解决方案。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210207103320582.png" srcset="/img/loading.gif" lazyload></p>
+<p>MongoDB ObjectId 一共需要 12 个字节存储：</p>
+<ul>
+<li>0~3：时间戳</li>
+<li>3~6： 代表机器 ID</li>
+<li>7~8：机器进程 ID</li>
+<li>9~11 ：自增值</li>
+</ul>
+<p><strong>MongoDB 方案的优缺点：</strong></p>
+<ul>
+<li><strong>优点</strong> ： 性能不错并且生成的 ID 是有序递增的</li>
+<li><strong>缺点</strong> ： 需要解决重复 ID 问题（当机器时间不对的情况下，可能导致会产生重复 ID） 、有安全性问题（ID 生成有规律性）</li>
+</ul>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><h4 id="UUID"><a href="#UUID" class="headerlink" title="UUID"></a>UUID</h4><p>UUID 是 Universally Unique Identifier（通用唯一标识符） 的缩写。UUID 包含 32 个 16 进制数字（8-4-4-4-12）。</p>
+<p>JDK 就提供了现成的生成 UUID 的方法，一行代码就行了。</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">//输出示例：cb4a9ede-fa5e-4585-b9bb-d60bce986eaa</span><br>UUID.randomUUID()<br></code></pre></div></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc4122">RFC 4122</a> 中关于 UUID 的示例是这样的：</p>
+<p><img src="https://img-blog.csdnimg.cn/20210202110824430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0MzM3Mjcy,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload></p>
+<p>我们这里重点关注一下这个 Version(版本)，不同的版本对应的 UUID 的生成规则是不同的。</p>
+<p>5 种不同的 Version(版本)值分别对应的含义（参考<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E5%94%AF%E4%B8%80%E8%AF%86%E5%88%AB%E7%A0%81">维基百科对于 UUID 的介绍</a>）：</p>
+<ul>
+<li><strong>版本 1</strong> : UUID 是根据时间和节点 ID（通常是 MAC 地址）生成；</li>
+<li><strong>版本 2</strong> : UUID 是根据标识符（通常是组或用户 ID）、时间和节点 ID 生成；</li>
+<li><strong>版本 3、版本 5</strong> : 版本 5 - 确定性 UUID 通过散列（hashing）名字空间（namespace）标识符和名称生成；</li>
+<li><strong>版本 4</strong> : UUID 使用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%9A%8F%E6%9C%BA%E6%80%A7">随机性</a>或<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%80%A7">伪随机性</a>生成。</li>
+</ul>
+<p>下面是 Version 1 版本下生成的 UUID 的示例：</p>
+<p><img src="https://img-blog.csdnimg.cn/20210202113013477.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0MzM3Mjcy,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload></p>
+<p>JDK 中通过 <code>UUID</code> 的 <code>randomUUID()</code> 方法生成的 UUID 的版本默认为 4。</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">UUID uuid = UUID.randomUUID();<br><span class="hljs-keyword">int</span> version = uuid.version();<span class="hljs-comment">// 4</span><br></code></pre></div></td></tr></table></figure>
+
+<p>另外，Variant(变体)也有 4 种不同的值，这种值分别对应不同的含义。这里就不介绍了，貌似平时也不怎么需要关注。</p>
+<p>需要用到的时候，去看看维基百科对于 UUID 的 Variant(变体) 相关的介绍即可。</p>
+<p>从上面的介绍中可以看出，UUID 可以保证唯一性，因为其生成规则包括 MAC 地址、时间戳、名字空间（Namespace）、随机或伪随机数、时序等元素，计算机基于这些规则生成的 UUID 是肯定不会重复的。</p>
+<p>虽然，UUID 可以做到全局唯一性，但是，我们一般很少会使用它。</p>
+<p>比如使用 UUID 作为 MySQL 数据库主键的时候就非常不合适：</p>
+<ul>
+<li>数据库主键要尽量越短越好，而 UUID 的消耗的存储空间比较大（32 个字符串，128 位）。</li>
+<li>UUID 是无顺序的，InnoDB 引擎下，数据库主键的无序性会严重影响数据库性能。</li>
+</ul>
+<p>最后，我们再简单分析一下 <strong>UUID 的优缺点</strong> （面试的时候可能会被问到的哦！） :</p>
+<ul>
+<li><strong>优点</strong> ：生成速度比较快、简单易用</li>
+<li><strong>缺点</strong> ： 存储消耗空间大（32 个字符串，128 位） 、 不安全（基于 MAC 地址生成 UUID 的算法会造成 MAC 地址泄露)、无序（非自增）、没有具体业务含义、需要解决重复 ID 问题（当机器时间不对的情况下，可能导致会产生重复 ID）</li>
+</ul>
+<h4 id="Snowflake-雪花算法"><a href="#Snowflake-雪花算法" class="headerlink" title="Snowflake(雪花算法)"></a>Snowflake(雪花算法)</h4><p>Snowflake 是 Twitter 开源的分布式 ID 生成算法。Snowflake 由 64 bit 的二进制数字组成，这 64bit 的二进制被分成了几部分，每一部分存储的数据都有特定的含义：</p>
+<ul>
+<li><strong>第 0 位</strong>： 符号位（标识正负），始终为 0，没有用，不用管。</li>
+<li><strong>第 1~41 位</strong> ：一共 41 位，用来表示时间戳，单位是毫秒，可以支撑 2 ^41 毫秒（约 69 年）</li>
+<li><strong>第 42~52 位</strong> ：一共 10 位，一般来说，前 5 位表示机房 ID，后 5 位表示机器 ID（实际项目中可以根据实际情况调整）。这样就可以区分不同集群/机房的节点。</li>
+<li><strong>第 53~64 位</strong> ：一共 12 位，用来表示序列号。 序列号为自增值，代表单台机器每毫秒能够产生的最大 ID 数(2^12 = 4096),也就是说单台机器每毫秒最多可以生成 4096 个 唯一 ID。</li>
+</ul>
+<p><img src="https://oscimg.oschina.net/oscnet/up-a7e54a77b5ab1d9fa16d5ae3a3c50c5aee9.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果你想要使用 Snowflake 算法的话，一般不需要你自己再造轮子。有很多基于 Snowflake 算法的开源实现比如美团 的 Leaf、百度的 UidGenerator，并且这些开源实现对原有的 Snowflake 算法进行了优化。</p>
+<p>另外，在实际项目中，我们一般也会对 Snowflake 算法进行改造，最常见的就是在 Snowflake 算法生成的 ID 中加入业务类型信息。</p>
+<p>我们再来看看 Snowflake 算法的优缺点 ：</p>
+<ul>
+<li><strong>优点</strong> ：生成速度比较快、生成的 ID 有序递增、比较灵活（可以对 Snowflake 算法进行简单的改造比如加入业务 ID）</li>
+<li><strong>缺点</strong> ： 需要解决重复 ID 问题（依赖时间，当机器时间不对的情况下，可能导致会产生重复 ID）。</li>
+</ul>
+<h3 id="开源框架"><a href="#开源框架" class="headerlink" title="开源框架"></a>开源框架</h3><h4 id="UidGenerator-百度"><a href="#UidGenerator-百度" class="headerlink" title="UidGenerator(百度)"></a>UidGenerator(百度)</h4><p><a target="_blank" rel="noopener" href="https://github.com/baidu/uid-generator">UidGenerator</a> 是百度开源的一款基于 Snowflake(雪花算法)的唯一 ID 生成器。</p>
+<p>不过，UidGenerator 对 Snowflake(雪花算法)进行了改进，生成的唯一 ID 组成如下。</p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-ad5b9dd0077a949db923611b2450277e406.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看出，和原始 Snowflake(雪花算法)生成的唯一 ID 的组成不太一样。并且，上面这些参数我们都可以自定义。</p>
+<p>UidGenerator 官方文档中的介绍如下：</p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-358b1a4cddb3675018b8595f66ece9cae88.png" srcset="/img/loading.gif" lazyload></p>
+<p>自 18 年后，UidGenerator 就基本没有再维护了，我这里也不过多介绍。想要进一步了解的朋友，可以看看 <a target="_blank" rel="noopener" href="https://github.com/baidu/uid-generator/blob/master/README.zh_cn.md">UidGenerator 的官方介绍</a>。</p>
+<h4 id="Leaf-美团"><a href="#Leaf-美团" class="headerlink" title="Leaf(美团)"></a>Leaf(美团)</h4><p><strong><a target="_blank" rel="noopener" href="https://github.com/Meituan-Dianping/Leaf">Leaf</a></strong> 是美团开源的一个分布式 ID 解决方案 。这个项目的名字 Leaf（树叶） 起源于德国哲学家、数学家莱布尼茨的一句话： “There are no two identical leaves in the world”（世界上没有两片相同的树叶） 。这名字起得真心挺不错的，有点文艺青年那味了！</p>
+<p><img src="https://img-blog.csdnimg.cn/20210422145229617.png" srcset="/img/loading.gif" lazyload></p>
+<p>Leaf 提供了 <strong>号段模式</strong> 和 <strong>Snowflake(雪花算法)</strong> 这两种模式来生成分布式 ID。并且，它支持双号段，还解决了雪花 ID 系统时钟回拨问题。不过，时钟问题的解决需要弱依赖于 Zookeeper 。</p>
+<p>Leaf 的诞生主要是为了解决美团各个业务线生成分布式 ID 的方法多种多样以及不可靠的问题。</p>
+<p>Leaf 对原有的号段模式进行改进，比如它这里增加了双号段避免获取 DB 在获取号段的时候阻塞请求获取 ID 的线程。简单来说，就是我一个号段还没用完之前，我自己就主动提前去获取下一个号段（图片来自于美团官方文章：<a target="_blank" rel="noopener" href="https://tech.meituan.com/2017/04/21/mt-leaf.html">《Leaf——美团点评分布式 ID 生成系统》</a>）。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210422144846724.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据项目 README 介绍，在 4C8G VM 基础上，通过公司 RPC 方式调用，QPS 压测结果近 5w/s，TP999 1ms。</p>
+<h4 id="Tinyid-滴滴"><a href="#Tinyid-滴滴" class="headerlink" title="Tinyid(滴滴)"></a>Tinyid(滴滴)</h4><p><a target="_blank" rel="noopener" href="https://github.com/didi/tinyid">Tinyid</a> 是滴滴开源的一款基于数据库号段模式的唯一 ID 生成器。</p>
+<p>数据库号段模式的原理我们在上面已经介绍过了。<strong>Tinyid 有哪些亮点呢？</strong></p>
+<p>为了搞清楚这个问题，我们先来看看基于数据库号段模式的简单架构方案。（图片来自于 Tinyid 的官方 wiki:<a target="_blank" rel="noopener" href="https://github.com/didi/tinyid/wiki/tinyid%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D">《Tinyid 原理介绍》</a>）</p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-4afc0e45c0c86ba5ad645d023dce11e53c2.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这种架构模式下，我们通过 HTTP 请求向发号器服务申请唯一 ID。负载均衡 router 会把我们的请求送往其中的一台 tinyid-server。</p>
+<p>这种方案有什么问题呢？在我看来（Tinyid 官方 wiki 也有介绍到），主要由下面这 2 个问题：</p>
+<ul>
+<li>获取新号段的情况下，程序获取唯一 ID 的速度比较慢。</li>
+<li>需要保证 DB 高可用，这个是比较麻烦且耗费资源的。</li>
+</ul>
+<p>除此之外，HTTP 调用也存在网络开销。</p>
+<p>Tinyid 的原理比较简单，其架构如下图所示：</p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-53f74cd615178046d6c04fe50513fee74ce.png" srcset="/img/loading.gif" lazyload></p>
+<p>相比于基于数据库号段模式的简单架构方案，Tinyid 方案主要做了下面这些优化：</p>
+<ul>
+<li><strong>双号段缓存</strong> ：为了避免在获取新号段的情况下，程序获取唯一 ID 的速度比较慢。 Tinyid 中的号段在用到一定程度的时候，就会去异步加载下一个号段，保证内存中始终有可用号段。</li>
+<li><strong>增加多 db 支持</strong> ：支持多个 DB，并且，每个 DB 都能生成唯一 ID，提高了可用性。</li>
+<li><strong>增加 tinyid-client</strong> ：纯本地操作，无 HTTP 请求消耗，性能和可用性都有很大提升。</li>
+</ul>
+<p>Tinyid 的优缺点这里就不分析了，结合数据库号段模式的优缺点和 Tinyid 的原理就能知道。</p>
+<h2 id="分布式-ID-生成方案总结"><a href="#分布式-ID-生成方案总结" class="headerlink" title="分布式 ID 生成方案总结"></a>分布式 ID 生成方案总结</h2><p>这篇文章中，我基本上已经把最常见的分布式 ID 生成方案都总结了一波。</p>
+<p>除了上面介绍的方式之外，像 ZooKeeper 这类中间件也可以帮助我们生成唯一 ID。<strong>没有银弹，一定要结合实际项目来选择最适合自己的方案。</strong></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F%E5%90%88%E9%9B%86/">面经合集</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%85%AB%E8%82%A1-%E5%88%86%E5%B8%83%E5%BC%8F/">八股 分布式</a>
+                    
+                  </div>
+                
+              </div>
+              <!-- 
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+               -->
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">ziyikee</a> <br>
+                <strong>本文链接: </strong><a href="/2021/12/03/%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8FID/">https://ziyikee.fun/2021/12/03/%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8FID/</a> <br>
+                <!-- <strong>本文链接: </strong><a href="{{ url_for(page.path) }}" title="{{ page.title }}">{{ page.permalink }}</a> -->
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/30/OS%E5%AE%9E%E9%AA%8C%E4%BA%8C/">
+                        <span class="hidden-mobile">HUST操作系统实验2</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","appKey":"mkp5UxNkruz1T9ByVFewLjOi","path":"window.location.pathname","placeholder":"大佬来指点两句？","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://yax4vgrj.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":null},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="javascript:" rel="nofollow noopener"><span>zyk的小破站</span></a> <i class="iconfont icon-love"></i> <a href="javascript:" rel="nofollow noopener"><span>Blog by ziyikee</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        冀ICP备2021024422号
+      </a>
+    </span>
+    
+  </div>
+
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'G-TKFRYZGQQM', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/timeDate.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
