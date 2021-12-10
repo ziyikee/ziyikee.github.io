@@ -1,0 +1,663 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com.css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel = "stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/aa.png">
+  <link rel="icon" href="/img/aa.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="zyk的个人博客">
+  <meta name="author" content="ziyikee">
+  <meta name="keywords" content="java">
+  <meta name="description" content="实验三.内存管理 3.1理解程序局部性原理 以下部分为错误尝试：  为了实现在Linux上查看系统的缺页次数，需要使用到一个工具SAR (System Activity Reporter系统活动情况报告). SAR是目前 Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I&#x2F;O、CPU效率、内存使用状况、进程活动及IPC有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HUST操作系统实验3">
+<meta property="og:url" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/index.html">
+<meta property="og:site_name" content="Blog by ziyikee">
+<meta property="og:description" content="实验三.内存管理 3.1理解程序局部性原理 以下部分为错误尝试：  为了实现在Linux上查看系统的缺页次数，需要使用到一个工具SAR (System Activity Reporter系统活动情况报告). SAR是目前 Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I&#x2F;O、CPU效率、内存使用状况、进程活动及IPC有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/实验要求.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/3.1.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test1.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test2.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test3.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test4.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/3.2.png">
+<meta property="article:published_time" content="2021-12-07T08:29:58.000Z">
+<meta property="article:modified_time" content="2021-12-10T11:26:16.003Z">
+<meta property="article:author" content="ziyikee">
+<meta property="article:tag" content="HUST">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/实验要求.png">
+  
+  <title>HUST操作系统实验3 - Blog by ziyikee</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ziyikee.fun","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"<-","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"41fc030db57d5570dd22f78997dc4a7e","google":"G-TKFRYZGQQM","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","app_key":"mkp5UxNkruz1T9ByVFewLjOi","server_url":"https://yax4vgrj.lc-cn-n1-shared.com","path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 80vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Blog by ziyikee.</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/page/wallhaven-pkogdp.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="HUST操作系统实验3">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      ziyikee
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-07 16:29" pubdate>
+        2021年12月7日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      6 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">HUST操作系统实验3</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年12月10日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="实验三-内存管理"><a href="#实验三-内存管理" class="headerlink" title="实验三.内存管理"></a>实验三.内存管理</h1><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\实验要求.png" srcset="/img/loading.gif" lazyload alt="实验要求"></p>
+<h2 id="3-1理解程序局部性原理"><a href="#3-1理解程序局部性原理" class="headerlink" title="3.1理解程序局部性原理"></a>3.1理解程序局部性原理</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\3.1.png" srcset="/img/loading.gif" lazyload alt="3.1"></p>
+<p><strong>以下部分为错误尝试：</strong></p>
+<hr>
+<p>为了实现在Linux上查看系统的缺页次数，需要使用到一个工具SAR (System Activity Reporter系统活动情况报告).</p>
+<p>SAR是目前 <a target="_blank" rel="noopener" href="http://lovesoo.org/tag/linux">Linux</a> 上最为全面的系统<a target="_blank" rel="noopener" href="http://lovesoo.org/tag/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90">性能分析</a>工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、<a target="_blank" rel="noopener" href="http://lovesoo.org/tag/%E7%A3%81%E7%9B%98">磁盘</a><a target="_blank" rel="noopener" href="http://lovesoo.org/tag/io">I/O</a>、<a target="_blank" rel="noopener" href="http://lovesoo.org/tag/cpu">CPU</a>效率、<a target="_blank" rel="noopener" href="http://lovesoo.org/tag/%E5%86%85%E5%AD%98">内存</a>使用状况、进程活动及IPC有关的活动等。</p>
+<ul>
+<li>安装SAR</li>
+</ul>
+<figure class="highlight x86asm"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs x86asm"><span class="hljs-number">1</span>.使用<span class="hljs-keyword">sar</span> -help判断当前系统是否已经安装<span class="hljs-keyword">sar</span>，若已经安装，则可以直接使用<br><span class="hljs-number">2</span>.若当前系统中无<span class="hljs-keyword">sar</span>，则使用命令yum install sysstat<br><span class="hljs-number">3</span>.安装完sysstat工具后，便可使用<span class="hljs-keyword">sar</span>命令<br></code></pre></div></td></tr></table></figure>
+
+<ul>
+<li>使用SAR获取系统缺页信息</li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs less">例如，每<span class="hljs-selector-tag">10</span>秒采样一次，连续采样<span class="hljs-selector-tag">3</span>次，监控内存分页：<br>使用命令：<br><span class="hljs-selector-tag">sar</span> <span class="hljs-selector-tag">-B</span> <span class="hljs-selector-tag">10</span> <span class="hljs-selector-tag">3</span><br>输出项说明：<br><span class="hljs-selector-tag">pgpgin</span>/<span class="hljs-selector-tag">s</span>：表示每秒从磁盘或<span class="hljs-selector-tag">SWAP</span>置换到内存的字节数(KB)<br><span class="hljs-selector-tag">pgpgout</span>/<span class="hljs-selector-tag">s</span>：表示每秒从内存置换到磁盘或<span class="hljs-selector-tag">SWAP</span>的字节数(KB)<br><span class="hljs-selector-tag">fault</span>/<span class="hljs-selector-tag">s</span>：每秒钟系统产生的缺页数,即主缺页与次缺页之和(major + minor)<br><span class="hljs-selector-tag">majflt</span>/<span class="hljs-selector-tag">s</span>：每秒钟产生的主缺页数.<br><span class="hljs-selector-tag">pgfree</span>/<span class="hljs-selector-tag">s</span>：每秒被放入空闲队列中的页个数<br><span class="hljs-selector-tag">pgscank</span>/<span class="hljs-selector-tag">s</span>：每秒被<span class="hljs-selector-tag">kswapd</span>扫描的页个数<br><span class="hljs-selector-tag">pgscand</span>/<span class="hljs-selector-tag">s</span>：每秒直接被扫描的页个数<br><span class="hljs-selector-tag">pgsteal</span>/<span class="hljs-selector-tag">s</span>：每秒钟从<span class="hljs-selector-tag">cache</span>中被清除来满足内存需要的页个数<br>%<span class="hljs-selector-tag">vmeff</span>：每秒清除的页(pgsteal)占总扫描页(pgscank+pgscand)的百分比<br></code></pre></div></td></tr></table></figure>
+
+<p>SAR命令详解，参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zcx-python/p/9001630.html">linux sar命令详解</a></p>
+<p>经过实验发现SAR命令并不能满足我的需求，因为他检测的是整个系统的情况，而且是分时采样的到的结果，无法满足我检测单个进程中的缺页情况</p>
+<hr>
+<p><strong>正确尝试:</strong></p>
+<p>使用命令：</p>
+<p><code>ps -eo min_flt,maj_flt,pid,%cpu,%mem,pagein,args --sort=min_flt</code></p>
+<p>可以查看当前正在运行的进程各自的缺页情况，显示结果中MINFLT为页分配时的缺页，MAJFLT为磁盘读写时的缺页，然后依次是PID，CPU占用，内存占用，从磁盘加载页面到物理内存。</p>
+<p>该命令测出的是正在运行的程序的缺页情况，因此可令测试程序执行完后，休眠几秒，在未结束时，执行上面的命令，获取本次测试程序的缺页情况。</p>
+<p>为充分展示由于局部性原理而造成的差异，下面进行几组对比实验：</p>
+<ul>
+<li>数组较小，内外循环次数一致</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-keyword">int</span> array[<span class="hljs-number">2048</span>][<span class="hljs-number">2048</span>];<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,j=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">2000</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;=<span class="hljs-number">2000</span>;j++)&#123;<br>           array[i][j] = <span class="hljs-number">0</span>;<br>         &#125; <br>    &#125;     <br>   <span class="hljs-built_in">sleep</span>(<span class="hljs-number">10</span>); <br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;OK\n&quot;</span>);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;             <br>&#125;  <br></code></pre></div></td></tr></table></figure>
+
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test1.png" srcset="/img/loading.gif" lazyload alt="test1"></p>
+<p>可以看到，本次运行，缺页次数：4171</p>
+<ul>
+<li>数组较大，内外循环次数一致：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-keyword">int</span> array[<span class="hljs-number">20480</span>][<span class="hljs-number">20480</span>];<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,j=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">20000</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;=<span class="hljs-number">20000</span>;j++)&#123;<br>           array[i][j] = <span class="hljs-number">0</span>;<br>         &#125; <br>    &#125;     <br>   <span class="hljs-built_in">sleep</span>(<span class="hljs-number">10</span>); <br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;OK\n&quot;</span>);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;             <br>&#125;  <br></code></pre></div></td></tr></table></figure>
+
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test2.png" srcset="/img/loading.gif" lazyload alt="test2"></p>
+<p>本次运行，缺页次数：400190</p>
+<ul>
+<li>数组较大，外层大循环，内层小循环：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-keyword">int</span> array[<span class="hljs-number">20480</span>][<span class="hljs-number">20480</span>];<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,j=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">20000</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;=<span class="hljs-number">200</span>;j++)&#123;<br>           array[i][j] = <span class="hljs-number">0</span>;<br>         &#125; <br>    &#125;     <br>   <span class="hljs-built_in">sleep</span>(<span class="hljs-number">10</span>); <br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;OK\n&quot;</span>);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;             <br>&#125;  <br></code></pre></div></td></tr></table></figure>
+
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test3.png" srcset="/img/loading.gif" lazyload alt="test3"></p>
+<p>本次运行，缺页次数：20171</p>
+<ul>
+<li><p>数组较大，外层小循环，内层大循环:</p>
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test4.png" srcset="/img/loading.gif" lazyload alt="test4"></p>
+</li>
+</ul>
+<p>本次运行，缺页次数：4170</p>
+<p>根据上述此次不同情况的程序运行结果，可以看到，随着访问数据量的增大，缺页次数也在增大。</p>
+<p>在访问数据量相同的情况下，访问更多顺序存储的数据，缺页次数会更少，体现了空间局部性原理。</p>
+<h2 id="3-2-模拟实现OPT和LRU淘汰算法"><a href="#3-2-模拟实现OPT和LRU淘汰算法" class="headerlink" title="3.2 模拟实现OPT和LRU淘汰算法"></a>3.2 模拟实现OPT和LRU淘汰算法</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\3.2.png" srcset="/img/loading.gif" lazyload alt="3.2"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/HUST/">HUST</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/HUST/">HUST</a>
+                    
+                  </div>
+                
+              </div>
+              <!-- 
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+               -->
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">ziyikee</a> <br>
+                <strong>本文链接: </strong><a href="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/">https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/</a> <br>
+                <!-- <strong>本文链接: </strong><a href="{{ url_for(page.path) }}" title="{{ page.title }}">{{ page.permalink }}</a> -->
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/03/%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8FID/">
+                        <span class="hidden-mobile">实现分布式ID</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","appKey":"mkp5UxNkruz1T9ByVFewLjOi","path":"window.location.pathname","placeholder":"大佬来指点两句？","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://yax4vgrj.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":null},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="javascript:" rel="nofollow noopener"><span>zyk的小破站</span></a> <i class="iconfont icon-love"></i> <a href="javascript:" rel="nofollow noopener"><span>Blog by ziyikee</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        冀ICP备2021024422号
+      </a>
+    </span>
+    
+  </div>
+
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'G-TKFRYZGQQM', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/timeDate.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
