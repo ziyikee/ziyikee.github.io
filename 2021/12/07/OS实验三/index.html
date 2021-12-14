@@ -29,19 +29,20 @@
 <meta property="og:site_name" content="Blog by ziyikee">
 <meta property="og:description" content="实验三.内存管理 3.1理解程序局部性原理 以下部分为错误尝试：  为了实现在Linux上查看系统的缺页次数，需要使用到一个工具SAR (System Activity Reporter系统活动情况报告). SAR是目前 Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I&#x2F;O、CPU效率、内存使用状况、进程活动及IPC有">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/实验要求.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/3.1.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test1.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test2.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test3.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/test4.png">
-<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/3.2.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/%E5%AE%9E%E9%AA%8C%E8%A6%81%E6%B1%82.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/3.1.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test1.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test2.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test3.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test4.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/3.2.png">
+<meta property="og:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/3.3%E8%A6%81%E6%B1%82.png">
 <meta property="article:published_time" content="2021-12-07T08:29:58.000Z">
-<meta property="article:modified_time" content="2021-12-10T11:26:16.003Z">
+<meta property="article:modified_time" content="2021-12-14T07:46:48.837Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="HUST">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog/source_posts/OS实验三/实验要求.png">
+<meta name="twitter:image" content="https://ziyikee.fun/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/%E5%AE%9E%E9%AA%8C%E8%A6%81%E6%B1%82.png">
   
   <title>HUST操作系统实验3 - Blog by ziyikee</title>
 
@@ -231,7 +232,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2k 字
+      2.1k 字
     </span>
   
 
@@ -285,13 +286,13 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年12月10日 晚上
+                  本文最后更新于：2021年12月14日 下午
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="实验三-内存管理"><a href="#实验三-内存管理" class="headerlink" title="实验三.内存管理"></a>实验三.内存管理</h1><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\实验要求.png" srcset="/img/loading.gif" lazyload alt="实验要求"></p>
-<h2 id="3-1理解程序局部性原理"><a href="#3-1理解程序局部性原理" class="headerlink" title="3.1理解程序局部性原理"></a>3.1理解程序局部性原理</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\3.1.png" srcset="/img/loading.gif" lazyload alt="3.1"></p>
+              <h1 id="实验三-内存管理"><a href="#实验三-内存管理" class="headerlink" title="实验三.内存管理"></a>实验三.内存管理</h1><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/%E5%AE%9E%E9%AA%8C%E8%A6%81%E6%B1%82.png" srcset="/img/loading.gif" lazyload alt="实验要求"></p>
+<h2 id="3-1理解程序局部性原理"><a href="#3-1理解程序局部性原理" class="headerlink" title="3.1理解程序局部性原理"></a>3.1理解程序局部性原理</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/3.1.png" srcset="/img/loading.gif" lazyload alt="3.1"></p>
 <p><strong>以下部分为错误尝试：</strong></p>
 <hr>
 <p>为了实现在Linux上查看系统的缺页次数，需要使用到一个工具SAR (System Activity Reporter系统活动情况报告).</p>
@@ -320,31 +321,34 @@
 </ul>
 <figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-keyword">int</span> array[<span class="hljs-number">2048</span>][<span class="hljs-number">2048</span>];<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,j=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">2000</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;=<span class="hljs-number">2000</span>;j++)&#123;<br>           array[i][j] = <span class="hljs-number">0</span>;<br>         &#125; <br>    &#125;     <br>   <span class="hljs-built_in">sleep</span>(<span class="hljs-number">10</span>); <br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;OK\n&quot;</span>);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;             <br>&#125;  <br></code></pre></div></td></tr></table></figure>
 
-<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test1.png" srcset="/img/loading.gif" lazyload alt="test1"></p>
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test1.png" srcset="/img/loading.gif" lazyload alt="test1"></p>
 <p>可以看到，本次运行，缺页次数：4171</p>
 <ul>
 <li>数组较大，内外循环次数一致：</li>
 </ul>
 <figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-keyword">int</span> array[<span class="hljs-number">20480</span>][<span class="hljs-number">20480</span>];<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,j=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">20000</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;=<span class="hljs-number">20000</span>;j++)&#123;<br>           array[i][j] = <span class="hljs-number">0</span>;<br>         &#125; <br>    &#125;     <br>   <span class="hljs-built_in">sleep</span>(<span class="hljs-number">10</span>); <br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;OK\n&quot;</span>);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;             <br>&#125;  <br></code></pre></div></td></tr></table></figure>
 
-<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test2.png" srcset="/img/loading.gif" lazyload alt="test2"></p>
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test2.png" srcset="/img/loading.gif" lazyload alt="test2"></p>
 <p>本次运行，缺页次数：400190</p>
 <ul>
 <li>数组较大，外层大循环，内层小循环：</li>
 </ul>
 <figure class="highlight cpp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-keyword">int</span> array[<span class="hljs-number">20480</span>][<span class="hljs-number">20480</span>];<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,j=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">20000</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;=<span class="hljs-number">200</span>;j++)&#123;<br>           array[i][j] = <span class="hljs-number">0</span>;<br>         &#125; <br>    &#125;     <br>   <span class="hljs-built_in">sleep</span>(<span class="hljs-number">10</span>); <br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;OK\n&quot;</span>);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;             <br>&#125;  <br></code></pre></div></td></tr></table></figure>
 
-<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test3.png" srcset="/img/loading.gif" lazyload alt="test3"></p>
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test3.png" srcset="/img/loading.gif" lazyload alt="test3"></p>
 <p>本次运行，缺页次数：20171</p>
 <ul>
 <li><p>数组较大，外层小循环，内层大循环:</p>
-<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\test4.png" srcset="/img/loading.gif" lazyload alt="test4"></p>
+<p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/test4.png" srcset="/img/loading.gif" lazyload alt="test4"></p>
 </li>
 </ul>
 <p>本次运行，缺页次数：4170</p>
 <p>根据上述此次不同情况的程序运行结果，可以看到，随着访问数据量的增大，缺页次数也在增大。</p>
 <p>在访问数据量相同的情况下，访问更多顺序存储的数据，缺页次数会更少，体现了空间局部性原理。</p>
-<h2 id="3-2-模拟实现OPT和LRU淘汰算法"><a href="#3-2-模拟实现OPT和LRU淘汰算法" class="headerlink" title="3.2 模拟实现OPT和LRU淘汰算法"></a>3.2 模拟实现OPT和LRU淘汰算法</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/MyBlog\source_posts\OS实验三\3.2.png" srcset="/img/loading.gif" lazyload alt="3.2"></p>
+<h2 id="3-2-模拟实现OPT和LRU淘汰算法"><a href="#3-2-模拟实现OPT和LRU淘汰算法" class="headerlink" title="3.2 模拟实现OPT和LRU淘汰算法"></a>3.2 模拟实现OPT和LRU淘汰算法</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/3.2.png" srcset="/img/loading.gif" lazyload alt="3.2"></p>
+<p>实现代码：<a target="_blank" rel="noopener" href="https://github.com/ziyikee/LRU-FIFO-OPT-/tree/master">HUST操作系统试验：LRU,FIFO,OPT算法模拟 (github.com)</a></p>
+<h2 id="3-3-利用pagemap计算虚拟地址对应的物理地址"><a href="#3-3-利用pagemap计算虚拟地址对应的物理地址" class="headerlink" title="3.3 利用pagemap计算虚拟地址对应的物理地址"></a>3.3 利用pagemap计算虚拟地址对应的物理地址</h2><p><img src="/2021/12/07/OS%E5%AE%9E%E9%AA%8C%E4%B8%89/3.3%E8%A6%81%E6%B1%82.png" srcset="/img/loading.gif" lazyload alt="3.3要求"></p>
+<p>程序的正确性仍需验证，先不放代码。</p>
 
             </div>
             <hr>
