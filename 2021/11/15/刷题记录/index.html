@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://ziyikee.fun/2021/11/15/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E5%89%91%E6%8C%8705.png">
 <meta property="og:image" content="https://ziyikee.fun/2021/11/15/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E5%89%91%E6%8C%8707.png">
 <meta property="article:published_time" content="2021-11-15T10:52:02.000Z">
-<meta property="article:modified_time" content="2021-12-10T11:26:27.199Z">
+<meta property="article:modified_time" content="2021-12-18T15:27:55.616Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="刷题记录">
 <meta name="twitter:card" content="summary_large_image">
@@ -230,7 +230,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      14k 字
+      15k 字
     </span>
   
 
@@ -239,7 +239,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      45 分钟
+      48 分钟
     </span>
   
 
@@ -284,7 +284,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年12月10日 晚上
+                  本文最后更新于：2021年12月18日 晚上
                 
               </p>
             
@@ -296,6 +296,19 @@
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​    不知不觉，已经好久没有刷题了，算法又太重要了，好焦虑。</p>
 <p>​    学校的OJ只能用c++，但是我准备的又是java，长期不写java，连基本的API都快忘记了，所以写这个帖子，每天刷几道题吧，数量不限，看时间是否充足。</p>
 <p>​    当前目标：先把剑指OFFER刷一遍。</p>
+<h2 id="2021-12-18"><a href="#2021-12-18" class="headerlink" title="2021-12-18"></a>2021-12-18</h2><p>nmd，复习不完也得刷题。跟着代码随想录的书把算法知识过一遍。</p>
+<ul>
+<li><h3 id="lc704-二分查找"><a href="#lc704-二分查找" class="headerlink" title="lc704.二分查找"></a>lc704.二分查找</h3><p>复习二分查找，注意边界处理。</p>
+</li>
+<li><h3 id="lc27-移除元素"><a href="#lc27-移除元素" class="headerlink" title="lc27.移除元素"></a>lc27.移除元素</h3><p>学习双指针的方法，利用快慢指针实现后续元素的前移。</p>
+</li>
+<li><h3 id="lc209-长度最小的子数组"><a href="#lc209-长度最小的子数组" class="headerlink" title="lc209.长度最小的子数组"></a>lc209.长度最小的子数组</h3><p>学习滑动窗口法，利用滑动窗口遍历所有情况，而且只遍历一遍，O(n)。</p>
+</li>
+<li><h3 id="lc59-螺旋矩阵二"><a href="#lc59-螺旋矩阵二" class="headerlink" title="lc59.螺旋矩阵二"></a>lc59.螺旋矩阵二</h3><p>练习对边界条件的处理，采用统一的边界处理方式，全部左闭右开，不然容易到处出BUG。</p>
+</li>
+<li><h3 id="lc4-寻找两个有序数组的中位数"><a href="#lc4-寻找两个有序数组的中位数" class="headerlink" title="lc4.寻找两个有序数组的中位数"></a>lc4.寻找两个有序数组的中位数</h3><p>hard，全靠题解，通过二分法来排除不符合的元素。硬背。</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> <span class="hljs-title">findMedianSortedArrays</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums1, <span class="hljs-keyword">int</span>[] nums2)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> m = nums1.length,n=nums2.length;<br>        <span class="hljs-keyword">if</span>((m+n)%<span class="hljs-number">2</span>==<span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">double</span>) findk(nums1,nums2,(m+n)/<span class="hljs-number">2</span> + <span class="hljs-number">1</span>);<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">return</span> (findk(nums1,nums2,(m+n)/<span class="hljs-number">2</span> + <span class="hljs-number">1</span>) +findk(nums1,nums2,(m+n)/<span class="hljs-number">2</span>))/<span class="hljs-number">2.0</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">findk</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums1,<span class="hljs-keyword">int</span>[] nums2,<span class="hljs-keyword">int</span> k)</span></span>&#123;<br>        <span class="hljs-keyword">int</span> index1 = <span class="hljs-number">0</span>,index2=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> length1 = nums1.length,length2 = nums2.length;<br><br>        <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>)&#123;<br>            <span class="hljs-keyword">if</span>(index1 == length1) <span class="hljs-keyword">return</span> nums2[index2 + k - <span class="hljs-number">1</span>];<br>            <span class="hljs-keyword">if</span>(index2 == length2) <span class="hljs-keyword">return</span> nums1[index1 + k - <span class="hljs-number">1</span>];<br>            <span class="hljs-keyword">if</span>(k==<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> Math.min(nums1[index1],nums2[index2]);<br><br>            <span class="hljs-keyword">int</span> x = k/<span class="hljs-number">2</span>;<br>            <span class="hljs-keyword">int</span> n1 = Math.min(index1+x-<span class="hljs-number">1</span>,length1-<span class="hljs-number">1</span>);<br>            <span class="hljs-keyword">int</span> n2 = Math.min(index2+x-<span class="hljs-number">1</span>,length2-<span class="hljs-number">1</span>);<br><br>            <span class="hljs-keyword">int</span> p1 = nums1[n1],p2 = nums2[n2];<br>            <span class="hljs-keyword">if</span>(p1 &lt; p2)&#123;<br>                k = k - (n1 - index1 +<span class="hljs-number">1</span> );<br>                index1 = n1 + <span class="hljs-number">1</span>;  <br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                k = k - (n2 - index2 +<span class="hljs-number">1</span> );<br>                index2 = n2 + <span class="hljs-number">1</span>;  <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure></li>
+</ul>
 <h2 id="2021-11-30"><a href="#2021-11-30" class="headerlink" title="2021-11-30"></a>2021-11-30</h2><ul>
 <li><h3 id="OJ-丑数"><a href="#OJ-丑数" class="headerlink" title="OJ.丑数"></a>OJ.丑数</h3><p><img src="/2021/11/15/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E4%B8%91%E6%95%B0.png" srcset="/img/loading.gif" lazyload alt="丑数"></p>
 <p>首先，根据输入，得到前n个素数，获得素数的方法有很多，时间复杂度各不相同，最快的应当是筛法求素数，但我不会😅😅，所以就采用笨一点的方法，从2和3开始依次往后枚举，如果这个数不能被前面的素数整除，那么他就是下一个素数，对于一个正整数n，判断能不能被从2到根号n范围内的素数整除即可。</p>
