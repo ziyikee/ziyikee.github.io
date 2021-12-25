@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[14],{344:function(E,A,B){"use strict";Object.defineProperty(A,"__esModule",{value:!0}),A.HuyaMacClientUrl=void 0,A.HuyaMacClientUrl="https://apps.apple.com/cn/app/%E8%99%8E%E7%89%99%E7%9B%B4%E6%92%ADhd-%E6%B8%B8%E6%88%8F%E4%BA%92%E5%8A%A8%E7%9B%B4%E6%92%AD%E5%B9%B3%E5%8F%B0/id886103288"}}]);

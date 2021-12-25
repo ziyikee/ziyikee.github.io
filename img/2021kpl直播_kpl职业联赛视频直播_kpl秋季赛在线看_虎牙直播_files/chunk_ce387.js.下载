@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[40],{994:function(n,A,P){"use strict";A.a=function(n){var A={};return function(P){return void 0===A[P]&&(A[P]=n(P)),A[P]}}}}]);

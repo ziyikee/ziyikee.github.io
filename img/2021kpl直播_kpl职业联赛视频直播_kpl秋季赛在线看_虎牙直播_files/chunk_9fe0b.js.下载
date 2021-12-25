@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[450],{438:function(e,i,n){"use strict";var t,r,s,c=n(300);i.a=Object(c.css)(t||(r=["\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap; \n"],s||(s=r.slice(0)),t=Object.freeze(Object.defineProperties(r,{raw:{value:Object.freeze(s)}}))))}}]);

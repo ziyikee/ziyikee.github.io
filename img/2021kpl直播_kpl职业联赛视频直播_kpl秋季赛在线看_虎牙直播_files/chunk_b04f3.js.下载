@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[1],{26:function(e,_,t){"use strict";Object.defineProperty(_,"__esModule",{value:!0});var P=(0,t(12).__importDefault)(t(52));_.default=new P.default}}]);

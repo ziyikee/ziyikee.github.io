@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[18],{68:function(r,e,n){"use strict";var t=n(42),o=n.n(t);n.d(e,"default",(function(){return o.a})),n.o(t,"createPortal")&&n.d(e,"createPortal",(function(){return t.createPortal})),n.o(t,"render")&&n.d(e,"render",(function(){return t.render})),void 0===window.ReactDOM&&(window.ReactDOM=o.a)}}]);

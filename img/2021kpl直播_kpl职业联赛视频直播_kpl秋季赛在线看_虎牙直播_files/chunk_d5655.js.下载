@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[104],{353:function(e,t){e.exports=function(e){var t=new Date(1e3*e),n=t.getFullYear(),A=t.getMonth()+1,P=t.getDate(),_=t.getHours(),o=t.getMinutes();return n+"-"+A+"-"+P+" "+(_<10?"0"+_:_)+":"+(o<10?"0"+o:o)}}}]);

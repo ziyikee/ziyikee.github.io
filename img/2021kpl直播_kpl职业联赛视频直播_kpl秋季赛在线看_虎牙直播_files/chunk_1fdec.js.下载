@@ -1,1 +1,0 @@
-(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[131],{361:function(n,u,d){"use strict";var t=d(327);d.d(u,"a",(function(){return t.a})),d.d(u,"b",(function(){return t.b})),d.d(u,"c",(function(){return t.c})),d.d(u,"d",(function(){return t.d})),d.d(u,"e",(function(){return t.e})),void 0===window.Redux&&(window.Redux=t.default)}}]);
