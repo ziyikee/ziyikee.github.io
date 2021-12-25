@@ -1,0 +1,1 @@
+(window.HUYA_MAIN_BASE_WEBPACK_JSONP=window.HUYA_MAIN_BASE_WEBPACK_JSONP||[]).push([[34],{127:function(n,t){var o;o=function(){return this}();try{o=o||new Function("return this")()}catch(n){"object"==typeof window&&(o=window)}n.exports=o}}]);

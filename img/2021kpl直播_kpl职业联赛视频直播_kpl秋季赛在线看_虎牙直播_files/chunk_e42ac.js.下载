@@ -1,0 +1,1 @@
+(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[363],{1213:function(o,n,_){o.exports=_.p+"components/PostCard/img/comment_1f64c.png"},1214:function(o,n,_){o.exports=_.p+"components/PostCard/img/comment_hover_e3e55.png"}}]);

@@ -1,0 +1,1 @@
+(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[209],{414:function(e,t,o){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.EditorElementType=void 0;var n=o(415),r=o(334);t.EditorElementType=n.ElementType,t.default=new n.Editor({parser:[{type:n.ElementType.Emoticon,matcher:r.EmoticonParser.emoticonNameMatcher}]})}}]);

@@ -1,0 +1,5 @@
+(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[86],{349:function(n,t,i){"use strict";
+/*!
+ * js多线程处理器
+ * https://github.com/menglexing/ProcessorJs
+ */t.a=function(n){var t=[],i=new Array(n),f=!1;function o(){if(!f&&0!==t.length){var n=function(){for(var n=0,t=i.length;n<t;n++)if(!i[n])return n;return-1}();-1!=n?(i[n]=!0,t.shift()((function(){i[n]=!1,f=!1,o()}),n)):f=!0}}this.size=function(){return t.length},this.process=function(n){"function"==typeof n&&(t.push(n),o())},this.preprocess=function(n){"function"==typeof n&&(t.unshift(n),o())},this.clear=function(){t=[]}}}}]);

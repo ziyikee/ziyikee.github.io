@@ -1,0 +1,1 @@
+(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[419],{716:function(o,n,_){o.exports=_.p+"components/RoomTreasureBox/img/box-static_1b33f.png"},717:function(o,n,_){o.exports=_.p+"components/RoomTreasureBox/img/box-dynamic_0da78.gif"}}]);

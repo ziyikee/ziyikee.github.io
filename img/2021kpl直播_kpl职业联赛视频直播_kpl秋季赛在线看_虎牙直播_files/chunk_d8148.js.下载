@@ -1,0 +1,6 @@
+(window.HUYA_MAIN_APP_WEBPACK_JSONP=window.HUYA_MAIN_APP_WEBPACK_JSONP||[]).push([[8],{285:function(r,t,n){var e;
+/*!
+  Copyright (c) 2018 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/!function(){"use strict";var n={}.hasOwnProperty;function i(){for(var r=[],t=0;t<arguments.length;t++){var e=arguments[t];if(e){var o=typeof e;if("string"===o||"number"===o)r.push(e);else if(Array.isArray(e)){if(e.length){var p=i.apply(null,e);p&&r.push(p)}}else if("object"===o)if(e.toString===Object.prototype.toString)for(var s in e)n.call(e,s)&&e[s]&&r.push(s);else r.push(e.toString())}}return r.join(" ")}r.exports?(i.default=i,r.exports=i):void 0===(e=function(){return i}.apply(t,[]))||(r.exports=e)}()}}]);
