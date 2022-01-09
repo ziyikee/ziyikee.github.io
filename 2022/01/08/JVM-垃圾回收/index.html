@@ -22,23 +22,20 @@
   <meta name="description" content="zyk的个人博客">
   <meta name="author" content="ziyikee">
   <meta name="keywords" content="java">
-  <meta name="description" content="JVM直接内存1. 直接内存原理直接内存是操作系统内存的一部分，并不是由虚拟机管理的内存，不受垃圾回收管理器的管理。 ​    正常情况下的内存使用：  根据上图所示，java缓冲区的内存是由JVM进行分配和回收的，JVM本身相对于操作系统来说属于用户态的应用程序，如果进行文件读写操作，需要由用户态转到内核态，由操作系统提供读写服务。因此在进行文件读写时，需要进过两次拷贝。 ​    直接内存的使">
+  <meta name="description" content="JVM-垃圾回收1. 如何判断对象可回收1.1 引用计数法一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。 存在循环引用的问题： 1 JVM没有采取这种方法 1.2 可达性分析法在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM-直接内存原理">
-<meta property="og:url" content="https://ziyikee.fun/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:title" content="JVM-垃圾回收">
+<meta property="og:url" content="https://ziyikee.fun/2022/01/08/JVM-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
 <meta property="og:site_name" content="Blog by ziyikee">
-<meta property="og:description" content="JVM直接内存1. 直接内存原理直接内存是操作系统内存的一部分，并不是由虚拟机管理的内存，不受垃圾回收管理器的管理。 ​    正常情况下的内存使用：  根据上图所示，java缓冲区的内存是由JVM进行分配和回收的，JVM本身相对于操作系统来说属于用户态的应用程序，如果进行文件读写操作，需要由用户态转到内核态，由操作系统提供读写服务。因此在进行文件读写时，需要进过两次拷贝。 ​    直接内存的使">
+<meta property="og:description" content="JVM-垃圾回收1. 如何判断对象可回收1.1 引用计数法一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。 存在循环引用的问题： 1 JVM没有采取这种方法 1.2 可达性分析法在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ziyikee.fun/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/1.png">
-<meta property="og:image" content="https://ziyikee.fun/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/2.png">
-<meta property="article:published_time" content="2022-01-08T07:04:14.000Z">
-<meta property="article:modified_time" content="2022-01-08T07:56:21.000Z">
+<meta property="article:published_time" content="2022-01-08T08:00:29.000Z">
+<meta property="article:modified_time" content="2022-01-08T11:52:34.372Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ziyikee.fun/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/1.png">
   
-  <title>JVM-直接内存原理 - Blog by ziyikee</title>
+  <title>JVM-垃圾回收 - Blog by ziyikee</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -195,12 +192,12 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/wallhaven-pkw6y3.jpg') no-repeat center center;
+         style="background: url('/img/a1.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="JVM-直接内存原理">
+            <span class="h2" id="subtitle" title="JVM-垃圾回收">
               
             </span>
 
@@ -215,7 +212,7 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-01-08 15:04" pubdate>
+      <time datetime="2022-01-08 16:00" pubdate>
         2022年1月8日 下午
       </time>
     </span>
@@ -226,7 +223,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      2.2k 字
     </span>
   
 
@@ -235,7 +232,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6 分钟
+      7 分钟
     </span>
   
 
@@ -276,38 +273,76 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">JVM-直接内存原理</h1>
+            <h1 style="display: none">JVM-垃圾回收</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年1月8日 下午
+                  本文最后更新于：2022年1月8日 晚上
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="JVM直接内存"><a href="#JVM直接内存" class="headerlink" title="JVM直接内存"></a>JVM直接内存</h1><h2 id="1-直接内存原理"><a href="#1-直接内存原理" class="headerlink" title="1. 直接内存原理"></a>1. 直接内存原理</h2><p>直接内存是操作系统内存的一部分，并不是由虚拟机管理的内存，不受垃圾回收管理器的管理。</p>
-<p>​    正常情况下的内存使用：</p>
-<p><img src="/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/1.png" srcset="/img/loading.gif" lazyload alt="1"></p>
-<p>根据上图所示，java缓冲区的内存是由JVM进行分配和回收的，JVM本身相对于操作系统来说属于用户态的应用程序，如果进行文件读写操作，需要由用户态转到内核态，由操作系统提供读写服务。因此在进行文件读写时，需要进过两次拷贝。</p>
-<p>​    直接内存的使用情况：</p>
-<p><img src="/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/2.png" srcset="/img/loading.gif" lazyload alt="2"></p>
-<p>根据上图可见，当java程序申请直接内存时，使用的的系统内存，并且java程序和操作系统都可以对这块内存进行操作，因此可以加快读写速度，但是直接内存不受GC的管理，分配的代价也比较大，常用于NIO操作，用作读写缓冲区。</p>
-<p>当然，如果申请的直接内存过大，会出现OutOfMemoryError异常。</p>
-<h2 id="2-直接内存的释放和回收"><a href="#2-直接内存的释放和回收" class="headerlink" title="2. 直接内存的释放和回收"></a>2. 直接内存的释放和回收</h2><p>​    使用ByteBuffer来申请直接内存：</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">ByteBuffer  buffer = ByteBuffer.allocateDirect(<span class="hljs-number">1024</span>);<br></code></pre></div></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ByteBuffer <span class="hljs-title">allocateDirect</span><span class="hljs-params">(<span class="hljs-keyword">int</span> capacity)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DirectByteBuffer(capacity);<br>    &#125;<br></code></pre></div></td></tr></table></figure>
-
-<p>DirectByteBuffer的内部实现如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">DirectByteBuffer(<span class="hljs-keyword">int</span> cap) &#123;                   <span class="hljs-comment">// package-private</span><br><br>        <span class="hljs-keyword">super</span>(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, cap, cap, <span class="hljs-keyword">null</span>);<br>        <span class="hljs-keyword">boolean</span> pa = VM.isDirectMemoryPageAligned();<br>        <span class="hljs-keyword">int</span> ps = Bits.pageSize();<br>        <span class="hljs-keyword">long</span> size = Math.max(<span class="hljs-number">1L</span>, (<span class="hljs-keyword">long</span>)cap + (pa ? ps : <span class="hljs-number">0</span>));<br>        Bits.reserveMemory(size, cap);<br><br>        <span class="hljs-keyword">long</span> base = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>            base = UNSAFE.allocateMemory(size);<br>        &#125; <span class="hljs-keyword">catch</span> (OutOfMemoryError x) &#123;<br>            Bits.unreserveMemory(size, cap);<br>            <span class="hljs-keyword">throw</span> x;<br>        &#125;<br>        UNSAFE.setMemory(base, size, (<span class="hljs-keyword">byte</span>) <span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">if</span> (pa &amp;&amp; (base % ps != <span class="hljs-number">0</span>)) &#123;<br>            <span class="hljs-comment">// Round up to page boundary</span><br>            address = base + ps - (base &amp; (ps - <span class="hljs-number">1</span>));<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            address = base;<br>        &#125;<br>        cleaner = Cleaner.create(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">new</span> Deallocator(base, size, cap));<br>        att = <span class="hljs-keyword">null</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
-
-<p>根据源码，我们可以看到申请内存实际上是通过一个UNSAFE对象来实现的，<code>base = UNSAFE.allocateMemory(size);</code>,通过使用allocateMemory方法来申请直接内存。同样在释放直接内存时，需要我们主动调用UNSAFE的freeMemory方法来释放内存。</p>
-<p>具体在DirectByteBuffer的实现方法中，我们看到了使用了一个Cleaner(虚引用)来检测this，就是我们当前的ByteBuffer对象，一旦ByteBuffer对象被垃圾回收，那么就会由ReferenceHandler线程通过Cleaner的clean方法来调用freeMemory方法来释放直接内存。</p>
-<p>根据源码可以看到，在创建Cleaner的同时，传入了Deallocator对象，在Deallocator对象存在一个run方法，该run方法内部调用了UNSAFE的freeMemory方法来释放直接内存。</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"> <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">if</span> (address == <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-comment">// Paranoia</span><br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            UNSAFE.freeMemory(address);<br>            address = <span class="hljs-number">0</span>;<br>            Bits.unreserveMemory(size, capacity);<br>&#125;<br></code></pre></div></td></tr></table></figure>
-
-<p>在实际使用中，当ByteBuffer对象被回收后，Cleaner便可以通过UNSAFE的freeMemory方法来回收直接内存，当然，我们也可以直接调用UNSAFE的freeMemory方法来回收直接内存，但是UNSAFE一般由JVM内部使用，上层程序无法直接使用，需要通过反射来间接获取UNSAFE对象。</p>
-
+              <h1 id="JVM-垃圾回收"><a href="#JVM-垃圾回收" class="headerlink" title="JVM-垃圾回收"></a>JVM-垃圾回收</h1><h2 id="1-如何判断对象可回收"><a href="#1-如何判断对象可回收" class="headerlink" title="1. 如何判断对象可回收"></a>1. 如何判断对象可回收</h2><h3 id="1-1-引用计数法"><a href="#1-1-引用计数法" class="headerlink" title="1.1 引用计数法"></a>1.1 引用计数法</h3><p>一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。</p>
+<p>存在循环引用的问题：</p>
+<p>1</p>
+<p>JVM没有采取这种方法</p>
+<h3 id="1-2-可达性分析法"><a href="#1-2-可达性分析法" class="headerlink" title="1.2 可达性分析法"></a>1.2 可达性分析法</h3><p>在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用根（GC Roots）的对象作为起点，从这些节点开始向下搜索，搜索走过的路径被称为引用链（Reference Chain)，当一个对象到GC Roots没有任何引用链相连时（即从GC Roots节点到该节点不可达），则证明该对象是不可用的。</p>
+<p>2</p>
+<p>如上图所示，object1~object4对GC Root都是可达的，说明不可被回收，object5和object6对GC Root节点不可达，说明其可以被回收。</p>
+<p>主体思路：扫描堆中的对象，看是否能够沿着以GC Root对象为起点的引用找到该对象，如果找不到，就表示可以回收。</p>
+<p><strong>哪些对象可以作为GC Root？</strong></p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+<li>系统核心线程运行所需要的对象</li>
+<li>被加锁的对象</li>
+<li>当前活跃线程中的对象</li>
+</ul>
+<h3 id="1-3-五种引用"><a href="#1-3-五种引用" class="headerlink" title="1.3 五种引用"></a>1.3 五种引用</h3><p>3</p>
+<ul>
+<li><p>强引用</p>
+<p>强引用就是指在程序代码中普遍存在的，类似<code>Object obj = new Object()</code>这类似的引用，只要强引用在，垃圾搜集器永远不会搜集被引用的对象。也就是说，宁愿出现内存溢出，也不会回收这些对象。</p>
+<p>对某个对象的所有强引用消失时，才会将该对象回收</p>
+</li>
+<li><p>软引用</p>
+<p>软引用是用来描述一些有用但并不是必需的对象，在Java中用<code>java.lang.ref.SoftReference</code>类来表示。对于软引用关联着的对象，只有在内存不足的时候JVM才会回收该对象。因此，这一点可以很好地用来解决OOM的问题，并且这个特性很适合用来实现缓存：比如网页缓存、图片缓存等。</p>
+<p>仅有弱引用引用该对象时，在垃圾回收之后，如果内存仍不足，则会再次发起垃圾回收，回收软引用对象。</p>
+<p>4</p>
+<p>当要申请第5个字符数组时，内存不足，GC将前四个字符数组回收。</p>
+<p>5</p>
+<p>如何清理软引用对象后，把对应的软引用(SoftReference)也回收？</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">//声明一个引用队列</span><br>ReferenceQueue&lt;<span class="hljs-keyword">byte</span>[]&gt; queue = <span class="hljs-keyword">new</span> ReferenceQueue&lt;&gt;();<br><span class="hljs-comment">//创建软引用时，设置了第二个参数，让当前的软引用关联到该引用队列，当软引用所引用的对象(byte[])被回收时，软引用自己会加入到引用队列中</span><br>SoftReference&lt;<span class="hljs-keyword">byte</span>[]&gt; ref = <span class="hljs-keyword">new</span> SoftReference&lt;<span class="hljs-keyword">byte</span>[]&gt;(<span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[4MB],queue);<br><span class="hljs-comment">//取出引用队列中无用的软引用对象，在list中移除</span><br>Reference&lt; ? extends <span class="hljs-keyword">byte</span>[]&gt; poll = queue.poll();<br><span class="hljs-keyword">while</span>(poll!=<span class="hljs-keyword">null</span>)&#123;<br>    list.remove(poll);<br>    poll = queue.poll();<br>&#125;<br></code></pre></div></td></tr></table></figure></li>
+<li><p>弱引用</p>
+<p>弱引用也是用来描述非必需对象的，当JVM进行垃圾回收时，无论内存是否充足，都会回收被弱引用关联的对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">WeakReference&lt;<span class="hljs-keyword">byte</span>[]&gt; ref = <span class="hljs-keyword">new</span> WeakReference&lt;<span class="hljs-keyword">byte</span>[]&gt;(<span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[4MB]);<br></code></pre></div></td></tr></table></figure></li>
+<li><p>虚引用</p>
+<p>虚引用对象，比如Cleaner，例如当ByteBuffer被回收时，他所引用的直接内存并没有被回收，此时需要将虚引用对象Cleaner对象放入一个引用队列，由另一个jvm线程检查队列中的是否存在虚引用，如果存在，则调用虚引用的clean方法，释放直接内存。</p>
+<p>虚引用和前面的软引用、弱引用不同，它并不影响对象的生命周期。在java中用<code>java.lang.ref.PhantomReference</code>类表示。如果一个对象与虚引用关联，则跟没有引用与之关联一样，在任何时候都可能被垃圾回收器回收。<br>要注意的是，虚引用必须和引用队列关联使用，当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会把这个虚引用加入到与之 关联的引用队列中。程序可以通过判断引用队列中是否已经加入了虚引用，来了解被引用的对象是否将要被垃圾回收。如果程序发现某个虚引用已经被加入到引用队列，那么就可以在所引用的对象的内存被回收之前采取必要的行动。</p>
+</li>
+<li><p>终结器引用</p>
+<p>finallize()，终结方法。</p>
+<p>当某个对象不被强引用，并且重写了finallize方法时，jvm会创建一个终结器引用指向该对象，并将终结器引用加入引用队列，由一个FinallizeHandler线程(优先级很低)检查引用队列中是否存在终结器引用，如果有，根据终结器引用找到该对象，并调用finallize方法，调用完之后，<strong>下一次</strong>垃圾回收时便可以回收该对象。</p>
+<p>终结器引用同样必须和引用队列关联使用，软引用和弱引用可关联，可不关联。</p>
+</li>
+</ul>
+<h2 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2.垃圾回收算法"></a>2.垃圾回收算法</h2><p>下面三种只是具体算法，并不是JVM实际所用的实现方法。</p>
+<ul>
+<li><p>标记清除</p>
+<p>6</p>
+<p>记录需要回收的对象空间的起始地址，加入空闲块列表，速度快，但容易产生内存碎片</p>
+</li>
+<li><p>标记整理</p>
+<p>7</p>
+<p>不产生内存碎片，但速度慢，效率较低</p>
+</li>
+<li><p>复制</p>
+<p>准备两块区域，不产生内存碎片，但需要占据双倍空间</p>
+<p>8,9,10,11</p>
+</li>
+</ul>
+<h2 id="3-分代垃圾回收"><a href="#3-分代垃圾回收" class="headerlink" title="3. 分代垃圾回收"></a>3. 分代垃圾回收</h2><h2 id="4-垃圾回收器"><a href="#4-垃圾回收器" class="headerlink" title="4. 垃圾回收器"></a>4. 垃圾回收器</h2><h2 id="5-垃圾回收调优"><a href="#5-垃圾回收调优" class="headerlink" title="5. 垃圾回收调优"></a>5. 垃圾回收调优</h2>
             </div>
             <hr>
             <div>
@@ -338,7 +373,7 @@
                -->
               <p class="note note-warning">
                 <strong>本文作者: </strong><a href="/">ziyikee</a> <br>
-                <strong>本文链接: </strong><a href="/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/">https://ziyikee.fun/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/</a> <br>
+                <strong>本文链接: </strong><a href="/2022/01/08/JVM-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">https://ziyikee.fun/2022/01/08/JVM-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</a> <br>
                 <!-- <strong>本文链接: </strong><a href="{{ url_for(page.path) }}" title="{{ page.title }}">{{ page.permalink }}</a> -->
                 <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                    </p>
@@ -348,18 +383,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/01/08/JVM-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">JVM-垃圾回收</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/12/14/OS%E5%AE%9E%E9%AA%8C4/">
-                        <span class="hidden-mobile">HUST操作系统实验四</span>
+                      <a href="/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/">
+                        <span class="hidden-mobile">JVM-直接内存原理</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
