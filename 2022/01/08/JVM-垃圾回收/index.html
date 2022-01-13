@@ -22,18 +22,30 @@
   <meta name="description" content="zyk的个人博客">
   <meta name="author" content="ziyikee">
   <meta name="keywords" content="java">
-  <meta name="description" content="JVM-垃圾回收1. 如何判断对象可回收1.1 引用计数法一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。 存在循环引用的问题： 1 JVM没有采取这种方法 1.2 可达性分析法在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用">
+  <meta name="description" content="JVM-垃圾回收1. 如何判断对象可回收1.1 引用计数法一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。 存在循环引用的问题：  JVM没有采取这种方法 1.2 可达性分析法在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用根">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM-垃圾回收">
 <meta property="og:url" content="https://ziyikee.fun/2022/01/08/JVM-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
 <meta property="og:site_name" content="Blog by ziyikee">
-<meta property="og:description" content="JVM-垃圾回收1. 如何判断对象可回收1.1 引用计数法一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。 存在循环引用的问题： 1 JVM没有采取这种方法 1.2 可达性分析法在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用">
+<meta property="og:description" content="JVM-垃圾回收1. 如何判断对象可回收1.1 引用计数法一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。 存在循环引用的问题：  JVM没有采取这种方法 1.2 可达性分析法在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用根">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315136.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315374.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315038.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131316846.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317815.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317597.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317813.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318825.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318318.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318288.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131319523.png">
 <meta property="article:published_time" content="2022-01-08T08:00:29.000Z">
-<meta property="article:modified_time" content="2022-01-12T11:47:37.910Z">
+<meta property="article:modified_time" content="2022-01-13T05:19:54.465Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315136.png">
   
   <title>JVM-垃圾回收 - Blog by ziyikee</title>
 
@@ -277,17 +289,17 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年1月12日 晚上
+                  本文最后更新于：2022年1月13日 下午
                 
               </p>
             
             <div class="markdown-body">
               <h1 id="JVM-垃圾回收"><a href="#JVM-垃圾回收" class="headerlink" title="JVM-垃圾回收"></a>JVM-垃圾回收</h1><h2 id="1-如何判断对象可回收"><a href="#1-如何判断对象可回收" class="headerlink" title="1. 如何判断对象可回收"></a>1. 如何判断对象可回收</h2><h3 id="1-1-引用计数法"><a href="#1-1-引用计数法" class="headerlink" title="1.1 引用计数法"></a>1.1 引用计数法</h3><p>一个对象被另一个对象引用，则本对象的计数值加1，另一个对象取消对本对象的引用，则引用计数值减1，当引用计数值为0时，判断该对象可回收。</p>
 <p>存在循环引用的问题：</p>
-<p>1</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315136.png" srcset="/img/loading.gif" lazyload alt="1"></p>
 <p>JVM没有采取这种方法</p>
 <h3 id="1-2-可达性分析法"><a href="#1-2-可达性分析法" class="headerlink" title="1.2 可达性分析法"></a>1.2 可达性分析法</h3><p>在Java中，是通过可达性分析（Reachability Analysis）来判定对象是否存活的。该算法的基本思路就是通过一些被称为引用根（GC Roots）的对象作为起点，从这些节点开始向下搜索，搜索走过的路径被称为引用链（Reference Chain)，当一个对象到GC Roots没有任何引用链相连时（即从GC Roots节点到该节点不可达），则证明该对象是不可用的。</p>
-<p>2</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315374.png" srcset="/img/loading.gif" lazyload alt="2"></p>
 <p>如上图所示，object1~object4对GC Root都是可达的，说明不可被回收，object5和object6对GC Root节点不可达，说明其可以被回收。</p>
 <p>主体思路：扫描堆中的对象，看是否能够沿着以GC Root对象为起点的引用找到该对象，如果找不到，就表示可以回收。</p>
 <p><strong>哪些对象可以作为GC Root？</strong></p>
@@ -300,7 +312,7 @@
 <li>被加锁的对象</li>
 <li>当前活跃线程中的对象</li>
 </ul>
-<h3 id="1-3-五种引用"><a href="#1-3-五种引用" class="headerlink" title="1.3 五种引用"></a>1.3 五种引用</h3><p>3</p>
+<h3 id="1-3-五种引用"><a href="#1-3-五种引用" class="headerlink" title="1.3 五种引用"></a>1.3 五种引用</h3><p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131315038.png" srcset="/img/loading.gif" lazyload alt="3"></p>
 <ul>
 <li><p>强引用</p>
 <p>强引用就是指在程序代码中普遍存在的，类似<code>Object obj = new Object()</code>这类似的引用，只要强引用在，垃圾搜集器永远不会搜集被引用的对象。也就是说，宁愿出现内存溢出，也不会回收这些对象。</p>
@@ -309,9 +321,9 @@
 <li><p>软引用</p>
 <p>软引用是用来描述一些有用但并不是必需的对象，在Java中用<code>java.lang.ref.SoftReference</code>类来表示。对于软引用关联着的对象，只有在内存不足的时候JVM才会回收该对象。因此，这一点可以很好地用来解决OOM的问题，并且这个特性很适合用来实现缓存：比如网页缓存、图片缓存等。</p>
 <p>仅有弱引用引用该对象时，在垃圾回收之后，如果内存仍不足，则会再次发起垃圾回收，回收软引用对象。</p>
-<p>4</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131316846.png" srcset="/img/loading.gif" lazyload alt="4"></p>
 <p>当要申请第5个字符数组时，内存不足，GC将前四个字符数组回收。</p>
-<p>5</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317815.png" srcset="/img/loading.gif" lazyload alt="5"></p>
 <p>如何清理软引用对象后，把对应的软引用(SoftReference)也回收？</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">//声明一个引用队列</span><br>ReferenceQueue&lt;<span class="hljs-keyword">byte</span>[]&gt; queue = <span class="hljs-keyword">new</span> ReferenceQueue&lt;&gt;();<br><span class="hljs-comment">//创建软引用时，设置了第二个参数，让当前的软引用关联到该引用队列，当软引用所引用的对象(byte[])被回收时，软引用自己会加入到引用队列中</span><br>SoftReference&lt;<span class="hljs-keyword">byte</span>[]&gt; ref = <span class="hljs-keyword">new</span> SoftReference&lt;<span class="hljs-keyword">byte</span>[]&gt;(<span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[4MB],queue);<br><span class="hljs-comment">//取出引用队列中无用的软引用对象，在list中移除</span><br>Reference&lt; ? extends <span class="hljs-keyword">byte</span>[]&gt; poll = queue.poll();<br><span class="hljs-keyword">while</span>(poll!=<span class="hljs-keyword">null</span>)&#123;<br>    list.remove(poll);<br>    poll = queue.poll();<br>&#125;<br></code></pre></div></td></tr></table></figure></li>
 <li><p>弱引用</p>
@@ -330,18 +342,21 @@
 <h2 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2.垃圾回收算法"></a>2.垃圾回收算法</h2><p>下面三种只是具体算法，并不是JVM实际所用的实现方法。</p>
 <ul>
 <li><p>标记清除</p>
-<p>6</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317597.png" srcset="/img/loading.gif" lazyload alt="6"></p>
 <p>记录需要回收的对象空间的起始地址，加入空闲块列表，速度快，但容易产生内存碎片</p>
 </li>
 <li><p>标记整理</p>
-<p>7</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317813.png" srcset="/img/loading.gif" lazyload alt="7"></p>
 <p>不产生内存碎片，但速度慢，效率较低</p>
 </li>
 <li><p>复制</p>
 <p>准备两块区域，不产生内存碎片，但需要占据双倍空间</p>
-<p>8,9,10,11</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318825.png" srcset="/img/loading.gif" lazyload alt="8"></p>
 </li>
 </ul>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318318.png" srcset="/img/loading.gif" lazyload alt="9"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318288.png" srcset="/img/loading.gif" lazyload alt="10"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131319523.png" srcset="/img/loading.gif" lazyload alt="11"></p>
 <h2 id="3-分代垃圾回收"><a href="#3-分代垃圾回收" class="headerlink" title="3. 分代垃圾回收"></a>3. 分代垃圾回收</h2><h2 id="4-垃圾回收器"><a href="#4-垃圾回收器" class="headerlink" title="4. 垃圾回收器"></a>4. 垃圾回收器</h2><h2 id="5-垃圾回收调优"><a href="#5-垃圾回收调优" class="headerlink" title="5. 垃圾回收调优"></a>5. 垃圾回收调优</h2>
             </div>
             <hr>
@@ -378,6 +393,23 @@
                 <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                    </p>
                    
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/08/JVM-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86/">
+                        <span class="hidden-mobile">JVM-直接内存原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
 

@@ -624,7 +624,7 @@ hexo -clean    清除旧文件
 hexo -g           生成最新
 hexo -d          提交
 hexo -s          启动本地预览
-ssh -T  &#x67;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#46;&#x63;&#x6f;&#109;    验证是否与服务器连
+ssh -T  &#103;&#105;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#x62;&#x2e;&#99;&#111;&#109;    验证是否与服务器连
         </a>
       </p>
 
@@ -634,59 +634,6 @@ ssh -T  &#x67;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#46;&#x63;&#
             <i class="iconfont icon-date"></i>
             <time datetime="2021-11-09 17:35" pubdate>
               2021-11-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Hexo/">Hexo</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Hexo/">Hexo</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/11/06/hexo%E8%A7%A3%E5%86%B3%E5%9B%BE%E7%89%87%E9%93%BE%E6%8E%A5%E9%97%AE%E9%A2%98/" target="_self">
-          Hexo解决图片链接问题
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/11/06/hexo%E8%A7%A3%E5%86%B3%E5%9B%BE%E7%89%87%E9%93%BE%E6%8E%A5%E9%97%AE%E9%A2%98/" target="_self">
-          
-          
-            
-          
-          在使用 Hexo 撰写博文时，时常需要将图片嵌入 md 文章中，但往往由于图片保存在本地主机，因此在网页中链接图片时，会无法获取本地主机的图片，导致图片不正常显示，在这里我通过使用Hexo插件的方式，保证图片可以正常上传。
-
-首先安装一个图片路径转换的插件：hexo-asset-image，在Hexo主文件夹下使用如下命令：
-npm install https://github.com/CodeF
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-11-06 14:58" pubdate>
-              2021-11-06
             </time>
           </div>
         
@@ -754,6 +701,58 @@ npm install https://github.com/CodeF
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/Hexo/">Hexo</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/10/18/%E8%87%AA%E6%97%8B%E9%94%81/" target="_self">
+          自旋锁
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/10/18/%E8%87%AA%E6%97%8B%E9%94%81/" target="_self">
+          
+          
+            
+          
+          自旋锁1.提出背景：​    由于多处理器环境中，某些资源的有限性，对于多个线程共享的资源进行访问时，需要进行互斥访问，便需要引入锁的概念，只有获取了锁的线程才可以对资源进行访问，由于多线程的核心是CPU的时间分片，所以同一时刻只能有一个线程获取锁。
+​    当锁没有被占用时，尝试获取锁的线程成功获取到锁，之后若有另外的线程尝试获取锁，通常有两种处理方式：
+​        1.没有获取到锁的线
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-10-18 13:25" pubdate>
+              2021-10-18
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/OS/">OS</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/OS/">OS</a>
             
           </div>
         

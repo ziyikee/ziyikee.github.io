@@ -29,13 +29,13 @@
 <meta property="og:site_name" content="Blog by ziyikee">
 <meta property="og:description" content="Redis事务Redis事务本质：一组命令集合。一个事务中的所有命令都会被序列化，在事务执行过程中，会按照顺序执行。 1|------队列 set set set....队列-------|  Redis事务：  开启事务（multi） 命令入队列（一系列命令） 执行事务（exec）  所有的命令在事务中，并没有直接执行，而是只会在执行命令发起的时候才会执行。 123456789101112131">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ziyikee.fun/2021/11/16/%E4%BA%94-Redis%E4%BA%8B%E5%8A%A1/1.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131352275.png">
 <meta property="article:published_time" content="2021-11-16T15:13:33.000Z">
-<meta property="article:modified_time" content="2021-11-17T06:15:18.711Z">
+<meta property="article:modified_time" content="2022-01-13T05:52:39.917Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ziyikee.fun/2021/11/16/%E4%BA%94-Redis%E4%BA%8B%E5%8A%A1/1.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131352275.png">
   
   <title>五.Redis事务与乐观锁 - Blog by ziyikee</title>
 
@@ -279,7 +279,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年11月17日 下午
+                  本文最后更新于：2022年1月13日 下午
                 
               </p>
             
@@ -322,7 +322,7 @@
 <li>悲观锁适用场景：<strong>频繁写入数据的场景</strong>，因为不管是读还是写 都会上锁，如果大量写入数据，为了数据安全上锁是有必要的，相反乐观锁就会大量的读取提交操作。但是当有大量数据读出的时候，效率低下。</li>
 </ul>
 <p>Redis实现乐观锁：</p>
-<p><img src="/2021/11/16/%E4%BA%94-Redis%E4%BA%8B%E5%8A%A1/1.png" srcset="/img/loading.gif" lazyload alt="1"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131352275.png" srcset="/img/loading.gif" lazyload alt="1"></p>
 <p>​        Redis通过使用watch命令来实现乐观锁，watch命令用于监视一个或多个key，如果在事务执行之前，这个（或这些）key被其他命令所改动，那么这个事务将被打断。</p>
 <p>​        大多数是基于数据版本（version）的记录机制实现的。即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个”version”字段来实现读取出数据时，将此版本号一同读出，之后更新时，对此版本号加1。此时，将提交数据的版本号与数据库表对应记录的当前版本号进行比对，如果提交的数据版本号大于数据库当前版本号，则予以更新，否则认为是过期数据。</p>
 <p>​        <strong>“ Redis使用WATCH命令实现事务的“检查再设置”（CAS）行为。作为WATCH命令的参数的键会受到Redis的监控，Redis能够检测到它们的变化。在执行EXEC命令之前，如果Redis检测到至少有一个键被修改了，那么整个事务便会中止运行，然后EXEC命令会返回一个Null值，提醒用户事务运行失败。”</strong></p>
