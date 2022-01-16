@@ -40,8 +40,16 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318318.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318288.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131319523.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151314060">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151326251">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151338552">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151409248">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151414104">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151427329">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151504083">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151507184">
 <meta property="article:published_time" content="2022-01-08T08:00:29.000Z">
-<meta property="article:modified_time" content="2022-01-13T06:45:27.243Z">
+<meta property="article:modified_time" content="2022-01-16T12:50:12.455Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary_large_image">
@@ -235,7 +243,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.2k 字
+      7k 字
     </span>
   
 
@@ -244,7 +252,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7 分钟
+      22 分钟
     </span>
   
 
@@ -289,7 +297,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年1月13日 下午
+                  本文最后更新于：2022年1月16日 晚上
                 
               </p>
             
@@ -335,7 +343,15 @@
 </li>
 <li><p>终结器引用</p>
 <p>finallize()，终结方法。</p>
-<p>当某个对象不被强引用，并且重写了finallize方法时，jvm会创建一个终结器引用指向该对象，并将终结器引用加入引用队列，由一个FinallizeHandler线程(优先级很低)检查引用队列中是否存在终结器引用，如果有，根据终结器引用找到该对象，并调用finallize方法，调用完之后，<strong>下一次</strong>垃圾回收时便可以回收该对象。</p>
+<p>当一个对象在进行可达性分析之后发现与GC roots之间不存在引用链之后，他将会被进行第一次标记，随后进行依次筛选，筛选的依据就是该对象是否需要执行<code>finalize()</code>方法。</p>
+<ul>
+<li><p>如果该对象没有重写<code>finalize</code>方法或者重写了<code>finalize</code>方法，但是该方法已经被虚拟机执行过一次了，则判定为不需要执行<code>finalize</code>方法了，此时本次垃圾收集将会将该对象当做垃圾回收。</p>
+</li>
+<li><p>如果本次垃圾收集判断需要执行<code>finalize()</code>方法，则将会把该对象放置在一个<code>F-queue</code>队列中，稍后由虚拟机自动建立一条低优先级的<code>Finalizer</code>线程去执行他们的<code>finalize()</code>方法（这里的执行是指虚拟机会触发这个方法的开始，但并不承诺等待他的结束，防止在执行该方法时花费太多时间或死循环，造成之后的队列中的对象持续等待）。</p>
+</li>
+</ul>
+<p>在执行完<code>finalize()</code>方法后，将会进行第二次标记，如果经过了<code>finalize()</code>方法，该对象与其他GC roots建立了联系，则相当于他通过<code>finalize()</code>方法完成了一次自救，本次垃圾回收不会将他回收，将其移出“即将回收”的集合中，倘若经过了<code>finalize()</code>方法之后，该对象依旧不可达，则本次垃圾回收他将会被回收。</p>
+<p>但是如果在之后的某次垃圾回收时，该对象又变成了不可达，则他这次无能为力了，因为<code>finalize()</code>方法已经被执行过一遍了，即任何一个对象的<code>finalize()</code>方法都只会被系统调用一次。如果之前执行过了，那么这次该对象已经没有机会了，只能被当做垃圾被回收。</p>
 <p>终结器引用同样必须和引用队列关联使用，软引用和弱引用可关联，可不关联。</p>
 </li>
 </ul>
@@ -346,18 +362,94 @@
 <p>记录需要回收的对象空间的起始地址，加入空闲块列表，速度快，但容易产生内存碎片</p>
 </li>
 <li><p>标记整理</p>
+<p>在完成标记后，进行整理——使所有存活的对象都向内存空间的一段移动，但是在老年代这种每次回收都有大量对象存活的区域，移动存活的对象并更新所有引用这些对象的地方将会是一项繁重的操作，并且这种对象移动需要全程暂停用户进程才能进行，又称<code>Stop The World</code></p>
 <p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131317813.png" srcset="/img/loading.gif" lazyload alt="7"></p>
-<p>不产生内存碎片，但速度慢，效率较低</p>
 </li>
 <li><p>复制</p>
-<p>准备两块区域，不产生内存碎片，但需要占据双倍空间</p>
+<p>将内存按照容量分为大小相等的两块，每次只使用其中的一块，当这一块的空间不足时，就将其中还存活的对象复制到另一块上面，然后把已经使用过的内存块一次清理掉。每次都是针对半区的回收，分配空间时不用考虑内存碎片的情况，只需要移动对顶指针，按顺序分配即可，但需要占据双倍空间。常用于新生代，因为新生代中存活对象较少，复制对象时复制量较少。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318825.png" srcset="/img/loading.gif" lazyload alt="8"></p>
 </li>
 </ul>
 <p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318318.png" srcset="/img/loading.gif" lazyload alt="9"></p>
 <p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131318288.png" srcset="/img/loading.gif" lazyload alt="10"></p>
 <p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131319523.png" srcset="/img/loading.gif" lazyload alt="11"></p>
-<h2 id="3-分代垃圾回收"><a href="#3-分代垃圾回收" class="headerlink" title="3. 分代垃圾回收"></a>3. 分代垃圾回收</h2><h2 id="4-垃圾回收器"><a href="#4-垃圾回收器" class="headerlink" title="4. 垃圾回收器"></a>4. 垃圾回收器</h2><h2 id="5-垃圾回收调优"><a href="#5-垃圾回收调优" class="headerlink" title="5. 垃圾回收调优"></a>5. 垃圾回收调优</h2>
+<p>从<code>垃圾收集的停顿时间</code>看，不移动对象的停顿时间会更短，甚至不停顿；但从<code>整个程序的吞吐量</code>上看，移动对象会跟划算，这里的吞吐量实际上是<code>用户程序</code>和<code>垃圾收集器</code>的效率总和，即时不移动对象会使垃圾收集器的效率提高，但是因为内存分配和访问相比垃圾收集的频率要高得多，不移动对象将会加剧内存分配和访问的负担，因此内存分配和访问的耗时增加，总体的吞吐量依然下降。</p>
+<p><code>HotPot</code>中关注吞吐量的<code>Paralle-Scavenge</code>收集器是基于<code>标记-整理算法</code>的，而关注延迟的<code>CMS</code>收集器则是基于<code>标记-清除算法</code>的。</p>
+<h2 id="3-分代垃圾回收"><a href="#3-分代垃圾回收" class="headerlink" title="3. 分代垃圾回收"></a>3. 分代垃圾回收</h2><h2 id="4-垃圾回收器"><a href="#4-垃圾回收器" class="headerlink" title="4. 垃圾回收器"></a>4. 垃圾回收器</h2><p>目前已经商用的几款垃圾收集器如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151314060" srcset="/img/loading.gif" lazyload alt="经典垃圾收集器"></p>
+<h3 id="4-1-Serial收集器"><a href="#4-1-Serial收集器" class="headerlink" title="4.1 Serial收集器"></a>4.1 Serial收集器</h3><p>Serial收集器是最基础，历史最悠久的收集器，这个收集器是一个单线程工作的收集器，但他的”单线程”并不仅仅是说明他只会使用一个处理器或收集器线程去完成垃圾收集工作，更重要的是强调在他进行垃圾收集时，必须暂停其他的工作线程，直到垃圾收集结束。<code>Stop The World</code>的工作是由虚拟机自动发起和执行的，在用户看来，是不可知，不可控的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151326251" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>尽管Serial收集器会在垃圾收集过程中停止一切用户工作线程，看起来老而无用，但它依然是HotSpot虚拟机运行在客户机模式下默认的新生代收集器，它相比于其他垃圾收集器，更加的简单而高效（与其他收集器的单线程相比），对于内存资源受限的环境，它是所有垃圾收集器里额外内存消耗最小的(保证垃圾收集能顺利高效的进行而存储的额外信息)；对于单核处理器或处理器核心数较少的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾回收自然可以获得最高的单线程收集效率。在客户端模式下，分给虚拟机管理的内存并不会很大，垃圾收集的停顿时间很小，对于用户来说完全可以接受，因此，Serial收集器对于运行在客户端模式下的虚拟机来说是一个很好的选择。</p>
+<h3 id="4-2-ParNew收集器"><a href="#4-2-ParNew收集器" class="headerlink" title="4.2 ParNew收集器"></a>4.2 ParNew收集器</h3><p>ParNew实际上就是Serial收集器的多线程并行版本，除了同时使用多条线程进行垃圾回收之外，其他的与Serial收集器差别不大。可以用于运行在服务端模式下的HotSpot虚拟机，用于新生代的垃圾收集，目前只能与CMS收集器配合工作，ParNew用于新生代垃圾收集，CMS用于老年代垃圾收集。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151338552" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>ParNew默认开启的线程数与处理器核心数量相同，在处理器核心非常多的情况下，可以使用<code>+XX:ParallelGCTreads</code>参数来限制垃圾收集的线程数。</p>
+<p><strong>在垃圾收集时的”并行”与”并发”的区别：</strong></p>
+<ul>
+<li>并行：描述的是<code>多条垃圾收集器线程之间</code>的关系，说明同一时间内有多条这样的线程在协同工作，同城默认此时用户线程处于等待状态(STW)</li>
+<li>并发：描述的是<code>垃圾收集器与用户线程之间</code>的关系，说明同一时间垃圾收集器线程与用户线程都在运行。由于用户线程并未被冻结，所以程序仍然能够响应服务请求，只不过由于垃圾收集器线程占用了一部分系统资源，此时应用程序的处理的吞吐量将受到一定的影响。</li>
+</ul>
+<h3 id="4-3-Parallel-Scavenge收集器"><a href="#4-3-Parallel-Scavenge收集器" class="headerlink" title="4.3 Parallel Scavenge收集器"></a>4.3 Parallel Scavenge收集器</h3><p>Parallel Scavenge收集器也是一款用于新生代的收集器，同样基于标记-复制算法实现，可并行收集的多线程收集器。</p>
+<p>Parallel Scavenge收集器的特点是他的关注点与其他收集器不同，CMS等收集器的关注点时尽可能的缩短垃圾收集时用户线程的停顿时间，而Parallel Scavenge收集器的目标则是<code>达到一个可控制的吞吐量</code>。所谓吞吐量就是<code>处理器用于运行用户代码的时间与处理器总消耗时间的比值</code>，即：<br>$$<br>吞吐量 = 运行用户代码的时间/（运行用户代码的时间+运行垃圾收集的时间）<br>$$<br>停顿时间越短越适合需要与用户交互或保证服务相应质量的程序，良好的相应速度能提升用户的体验；</p>
+<p>高吞吐量可以以最高效率的利用处理器的资源，尽快完成运算任务，主要适合在后台运算而不需要太多交互的分析任务。</p>
+<p><strong>自适应调节策略也是Parallel Scavenge与ParNew一个重要区别</strong></p>
+<h3 id="4-4-Serial-Old收集器"><a href="#4-4-Serial-Old收集器" class="headerlink" title="4.4 Serial Old收集器"></a>4.4 Serial Old收集器</h3><p>Serial Old收集器是Serial的老年代版本，同样是单线程的，使用标记-整理算法。</p>
+<p>这个收集器的主要意义也是客户端模式下用于HotSpot虚拟机的老年代回收，或者在服务端模式下，在JDK5以及之前的版本中与新生代的Parallel Scavenge配合使用，或者作为CMS收集器发生失败时的后背预案，在并发收集发生<code>Concurrent Mode Failure</code>时使用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151409248" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="4-5-Parallel-Old收集器"><a href="#4-5-Parallel-Old收集器" class="headerlink" title="4.5 Parallel Old收集器"></a>4.5 Parallel Old收集器</h3><p>Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，基于标记-整理算法实现。</p>
+<p>在注重吞吐量或者处理器资源较为稀缺的场合，都可以优先考虑Parallel Scavenge加Paralle Old收集器的组合。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151414104" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="4-6-CMS收集器"><a href="#4-6-CMS收集器" class="headerlink" title="4.6 CMS收集器"></a>4.6 CMS收集器</h3><p>CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。<br>基于标记-清除算法实现。</p>
+<p><strong>运行过程</strong></p>
+<ol>
+<li>初始标记</li>
+<li>并发标记</li>
+<li>重新标记</li>
+<li>并发清除</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151427329" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>初始标记</strong>阶段：仅仅只是标记一下GC Roots能直接关联到的对象，速度很快；<br><strong>并发标记</strong>阶段：就是从GC Roots的直接关联对象开始便利整个对象图的过程，这个过程耗时较长但不需要停顿用户线程，可与垃圾收集线程一起并发运行；<br><strong>重新标记</strong>阶段：是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录。（停顿时间比初始标记阶段稍长一些，远比并发标记阶段的时间短）；<br><strong>并发清除</strong>阶段：清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，这个阶段可以与用户线程同时并发。</p>
+<p><strong>CMS的优点:</strong><br>（1）并发收集（2）低延迟</p>
+<p><strong>CMS的弊端:</strong></p>
+<p>（1)会产生内存碎片，导致并发清除后，用户线程可用的空间不足。在无法分配大对象的情况下，不得不提前触发Full GC。</p>
+<p>（2) CMS收集器对CPU资源非常敏感。在并发阶段，它虽然不会导致用户停顿，但是会因为占用了一部分线程而导致应用程序变慢，总吞吐量会降低。</p>
+<p>（3) CMS收集器无法处理浮动垃圾。在并发标记阶段由于程序的工作线程和垃圾收集线程是同时运行或者交叉运行的，那么在并发标记阶段如果产生新的垃圾对象，CMS将无法对这些垃圾对象进行标记，最终会导致这些新产生的垃圾对象没有被及时回收，从而只能在下一次执行GC时释放这些之前未被回收的内存空间。</p>
+<p>（4）如果CMS运行期间预留的内存无法满足程序分配新对象的需要，就会出现一次”并发失败(Concurrent Mode Failure)”，这时虚拟机将不得不启动后备预案：冻结用户线程的执行，临时启用Serial Old收集器来重新进行老年代的垃圾收集，但这样停顿时间就更长了。</p>
+<h3 id="4-7-Garbage-First收集器"><a href="#4-7-Garbage-First收集器" class="headerlink" title="4.7 Garbage First收集器"></a>4.7 Garbage First收集器</h3><p>Garbage First（简称G1），开创了收集器面向局部收集的设计思路和基于Region的内存布局形式。<br>G1是一款主要面向服务端应用的垃圾收集器，G1可以面向堆内存任何部分来组成回收集进行回收，衡量标准不再是它属于哪个分代，而是哪块内存中存放的垃圾数量最多，回收收益最大，这就是G1收集器的Mixed GC模式。</p>
+<p>G1不再坚持固定大小以及固定数量的分代区域划分，而是把连续的Java堆划分为多个大小相等的独立区域（Region），<strong>每一个Region都可以根据需要，扮演新生代的Eden空间、Survivor空间、或者老年代空间</strong>。<br>Region中还有一类特殊的Humongous区域，专门用来存储大对象。</p>
+<p>G1收集器之所以能建立可预测的停顿时间模型，是因为它将Region作为单次回收的最小单元，既每次收集到的内存空间都是Region大小的整数倍，这样可以有计划地避免在整个Java堆中进行全区域的垃圾收集。更具体的处理思路是让G1收集器去跟踪各个Region里面的垃圾堆积的“价值”大小，价值即回收所获得的空间大小以及回收所需时间的经验值，然后在后台维护一个优先级列表，<strong>每次根据用户设定允许的收集停顿时间，优先处理回收价值收益最大的那些Region。</strong><br><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151504083" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>关键细节问题</strong></p>
+<ul>
+<li><p>将Java堆分成多个独立Region后，Region里面存在的跨Region引用对象如何解决？</p>
+</li>
+<li><p>使用记忆集避免全堆作为GC Roots扫描。</p>
+</li>
+<li><p>在并发标记阶段如何保证收集线程与用户线程不干扰运行？</p>
+<p>通过原始快照（SATB）算法来实现。</p>
+</li>
+<li><p>怎样建立起可靠的停顿预测模型？</p>
+<p>以衰减均值为理论基础来实现的，</p>
+</li>
+</ul>
+<p><strong>运作过程</strong></p>
+<ul>
+<li><p>初始标记 ：仅仅只是标记一下GC Roots能直接关联到的对象，并且修改TAMS指针的值，让下一阶段用户线程并发运行时，能正确地在可用的Region中分配新对象。这个阶段需要停顿线程，但耗时很短，而且是借用进行Minor GC的时候同步完成的，所以G1收集器在这个阶段实际上并没有额外的停顿。</p>
+</li>
+<li><p>并发标记 ： 从GC Root开始对堆中对象进行可达性分析，递归扫描整个堆里的对象图，找出要回收的对象，这阶段耗时较长，但可与用户程序并发执行。当对象图扫描完成以后，还要重新处理SATB记录下的在并发时有引用变动的对象。</p>
+</li>
+<li><p>最终标记 ： 堆用户线程做另一个短暂的暂停，用于处理并发阶段结束后仍遗留下来的最后那少量的SATB记录(原始快照)</p>
+</li>
+<li><p>筛选回收 ： 负责更新Region的统计数据，对各个Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧Region的全部空间。这里的操作涉及存活对象的移动，必须暂停用户线程，由多条收集器线程并行完成的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201151507184" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<p><strong>优点</strong></p>
+<ul>
+<li>可以指定最大停顿时间</li>
+<li>分Region的内存布局</li>
+<li>按收益动态确定回收集</li>
+<li>G1从整体来看时基于“标记-整理”算法来实现的收集器，从局部上看又是基于“标记-复制”算法实现的，这两种算法都意味着G1运行期间不会产生内存空间碎片，垃圾收集完成后能提供规整的可用内存。这种特性有利于程序长时间运行，在程序为大对象分配内存时不容易因无法找到连续内存空间而提前触发下一次收集。</li>
+</ul>
+
             </div>
             <hr>
             <div>
