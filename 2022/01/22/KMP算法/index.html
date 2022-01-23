@@ -1,0 +1,669 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com.css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel = "stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131435626.png">
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131435626.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="zyk的个人博客">
+  <meta name="author" content="ziyikee">
+  <meta name="keywords" content="java">
+  <meta name="description" content="KMP算法解析KMP算法主要用于在一个字符串中找到另一个字符串，应用场景很多，但核心问题都是如何在一个文本字符串中，找到一个目标字符串。 主要有两种形式的KMP算法，一种是基于前缀表的解法，一种是基于有限状态机的解法。 基于前缀表的解法主要参考《代码随想录》中的解题思想。 该方法主要利用一个叫next的前缀表的数组来判断：如果当前位置的字符不匹配时，根据之前已经匹配过的文本内容，需要退回到目标串的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KMP算法">
+<meta property="og:url" content="https://ziyikee.fun/2022/01/22/KMP%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Blog by ziyikee">
+<meta property="og:description" content="KMP算法解析KMP算法主要用于在一个字符串中找到另一个字符串，应用场景很多，但核心问题都是如何在一个文本字符串中，找到一个目标字符串。 主要有两种形式的KMP算法，一种是基于前缀表的解法，一种是基于有限状态机的解法。 基于前缀表的解法主要参考《代码随想录》中的解题思想。 该方法主要利用一个叫next的前缀表的数组来判断：如果当前位置的字符不匹配时，根据之前已经匹配过的文本内容，需要退回到目标串的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231337412.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231417008.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231419393.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231420237.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231421140.jpg">
+<meta property="article:published_time" content="2022-01-22T14:54:18.000Z">
+<meta property="article:modified_time" content="2022-01-23T06:43:32.632Z">
+<meta property="article:author" content="ziyikee">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231337412.jpg">
+  
+  <title>KMP算法 - Blog by ziyikee</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ziyikee.fun","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"<-","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"41fc030db57d5570dd22f78997dc4a7e","google":"G-TKFRYZGQQM","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","app_key":"mkp5UxNkruz1T9ByVFewLjOi","server_url":"https://yax4vgrj.lc-cn-n1-shared.com","path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 80vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Blog by ziyikee.</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231443123.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="KMP算法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      ziyikee
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-01-22 22:54" pubdate>
+        2022年1月22日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      19 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">KMP算法</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年1月23日 下午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="KMP算法解析"><a href="#KMP算法解析" class="headerlink" title="KMP算法解析"></a>KMP算法解析</h1><p>KMP算法主要用于在一个字符串中找到另一个字符串，应用场景很多，但核心问题都是如何在一个文本字符串中，找到一个目标字符串。</p>
+<p>主要有两种形式的KMP算法，一种是基于前缀表的解法，一种是基于有限状态机的解法。</p>
+<h2 id="基于前缀表的解法"><a href="#基于前缀表的解法" class="headerlink" title="基于前缀表的解法"></a>基于前缀表的解法</h2><p>主要参考<code>《代码随想录》</code>中的解题思想。</p>
+<p>该方法主要利用一个叫<code>next</code>的前缀表的数组来判断：如果当前位置的字符不匹配时，根据之前已经匹配过的文本内容，需要退回到目标串的哪里开始再次匹配，而不是重头匹配。</p>
+<p>前缀表的任务是：<strong>当前位置匹配失败后，找到之前已经匹配的位置再重新匹配，这也意味着在某个字符匹配失败后，前缀表会告诉你下一步匹配时目标串应该跳到哪个位置</strong>。</p>
+<p>前缀表的定义为：<strong>记录下标i(包括i)之前的字符串中有多长的相同前后缀。</strong></p>
+<p>前缀：字符串中不包含最后一个字符的所有以第一个字符开头的连续子字符串。</p>
+<p>后缀：字符串中不包含第一个字符的所有以最后一个字符结尾的连续子字符串。</p>
+<figure class="highlight css"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs css">字符串：<span class="hljs-selector-tag">a</span>，最长相同前后缀的长度的<span class="hljs-number">0</span><br>字符串：aa，最长相同前后缀的长度为<span class="hljs-number">1</span>，最长前缀：<span class="hljs-selector-tag">a</span>，最长后缀：<span class="hljs-selector-tag">a</span><br>字符串：aab，最长相同前后缀的长度为<span class="hljs-number">0</span>，因为最短前缀<span class="hljs-selector-tag">a</span>，最短后缀<span class="hljs-selector-tag">b</span>，不相同<br>字符串：aaba，最长相同前后缀的长度为<span class="hljs-number">1</span>，最长前缀：<span class="hljs-selector-tag">a</span>，最长后缀：<span class="hljs-selector-tag">a</span><br>字符串：aabaa，最长相同前后缀的长度为<span class="hljs-number">2</span>，最长前缀：aa，最长后缀：aa<br>字符串：aabaaf，最长相同前后缀的长度为<span class="hljs-number">0</span>，因为最短前缀<span class="hljs-selector-tag">a</span>，最短后缀f，不相同<br></code></pre></div></td></tr></table></figure>
+
+<p>根据上面的分析，对于字符串<code>aabaaf</code>，他的前缀表为<code>[0,1,0,1,2,0]</code>。</p>
+<p><strong>构造next数组</strong></p>
+<ul>
+<li>初始化next数组</li>
+<li>处理前后缀不相同的情况</li>
+<li>处理前后缀相同的情况</li>
+</ul>
+<p>next数组是目标串的前缀表，只根据目标串来构造，与文本串无关。</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/*</span><br><span class="hljs-comment">使用i，j两个指针，i指向后缀的起始位置，j指向前缀的起始位置</span><br><span class="hljs-comment">初始化j = 0，next[0] = 0;</span><br><span class="hljs-comment">然后i从1开始，依次处理长度为2的字符串最长相同前后缀长度next[i]，即next[1],之后依次处理长度为2,3,4...的目标船的子字符串的最长相同前后缀长度。</span><br><span class="hljs-comment">如果当前前后缀相同，则j++，令next[i] = j，因为j是从0开始的，所以记录长度需要先++，之后下一轮循环，判断前后缀各自的下一个字符是否相同。</span><br><span class="hljs-comment">如果当前前后缀不同，就需要对j进行回退，获取当前比较的前缀字符j的前一个字符的next值，令j = next[j-1],然后继续比较i和j处的字符，这里是最巧妙的地方！！！很妙！！！我也不知道怎么解释😭😭</span><br><span class="hljs-comment">*/</span>  <br><span class="hljs-keyword">int</span>[] next;<br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getNext</span><span class="hljs-params">(String s)</span></span>&#123;<br>        <span class="hljs-keyword">int</span> len = s.length();<br>        next = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[len];<br>        next[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;i&lt;len;i++)&#123;<br>            <span class="hljs-keyword">while</span>(j&gt;<span class="hljs-number">0</span>&amp;&amp;s.charAt(j)!=s.charAt(i))&#123;<br>                j = next[j-<span class="hljs-number">1</span>];<br>            &#125;<br>            <span class="hljs-keyword">if</span>(s.charAt(i)==s.charAt(j))&#123;<br>                j++;<br>            &#125;<br>            next[i] = j;<span class="hljs-comment">//next[i]是当前位置的字符串的最长相同前后缀的长度，因为是长度所以先++之后赋的值。</span><br>        &#125;<br>    &#125;<br></code></pre></div></td></tr></table></figure>
+
+<p>得到next数组之后,我们便可以根据next数组去进行字符串匹配。</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/*</span><br><span class="hljs-comment">首先获取next数组，接下来开始进行匹配</span><br><span class="hljs-comment">i指向文本串当前所需要匹配的字符，j指向目标串当前所需要匹配的字符</span><br><span class="hljs-comment">整个匹配过程中，i一直向前推进，只有目标串根据匹配情况不断调整下一次匹配的位置</span><br><span class="hljs-comment">*/</span><br>		getNext(needle);<span class="hljs-comment">//获取next数组（前缀数组）</span><br>        <span class="hljs-keyword">int</span> len = needle.length();<br>        <span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;i &lt; haystack.length();i++)&#123;<br>            <span class="hljs-keyword">while</span>(j&gt;<span class="hljs-number">0</span>&amp;&amp;haystack.charAt(i)!=needle.charAt(j))&#123;<br>                j = next[j-<span class="hljs-number">1</span>];<span class="hljs-comment">//当前不匹配时，根据当前元素的前一个元素的next值去直到，当前的i应该继续和匹配串中的哪一个去匹配。</span><br>            &#125;<br>            <span class="hljs-keyword">if</span>(haystack.charAt(i)==needle.charAt(j))&#123;<br>                j++;<span class="hljs-comment">//如果当前值匹配，则继续匹配下一个字符</span><br>            &#125;<br>            <span class="hljs-keyword">if</span>(len==j)&#123;<br>                <span class="hljs-keyword">return</span> ;<span class="hljs-comment">//匹配完成，找到了目标字符串</span><br>            &#125;         <br>        &#125;<br>	    <span class="hljs-keyword">return</span> ;<span class="hljs-comment">//匹配失败，没找到</span><br></code></pre></div></td></tr></table></figure>
+
+<figure class="highlight autoit"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs autoit">对于字符串aabaaf，得到<span class="hljs-keyword">next</span>数组为[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>]<br>假设当前需要匹配第六个字符，如果文本串为aaaaabaabaaf，当前已匹配的情况为aaa aabaa baaf<br>当前需要匹配b和f是否相同，结果是不同，此时需要根据<span class="hljs-keyword">next</span>数组去重新调整j的值，j当前为<span class="hljs-number">5</span>，此时匹配不成功，根据经验，我们应该重新调整令j=<span class="hljs-number">2</span>，即与目标字符串的第三个字符b来比较，因为当我们比较到j=<span class="hljs-number">5</span>时，已经知道前面有aa了，所以需要令j等于<span class="hljs-number">2</span>，而<span class="hljs-number">2</span>正是目标字符串的前缀表中，j当前字符的前一个字符的<span class="hljs-keyword">next</span>值，因此令<br>j=<span class="hljs-keyword">next</span>[j-i],下一步需要跳到的位置就是<span class="hljs-keyword">next</span>[j<span class="hljs-number">-1</span>],将此位置的字符与当前i位置的字符进行比较。<br></code></pre></div></td></tr></table></figure>
+
+<p>我直呼：”妙啊！”。虽然为什们这样做还是一知半解。</p>
+<p><strong>lc-28.实现strStr()</strong></p>
+<p>给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。</p>
+<p>使用前缀表的解题代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br><br>    <span class="hljs-keyword">int</span>[] next;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getNext</span><span class="hljs-params">(String s)</span></span>&#123;<br>        <span class="hljs-keyword">int</span> len = s.length();<br>        next = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[len];<br>        next[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;i&lt;len;i++)&#123;<br>            <span class="hljs-keyword">while</span>(j&gt;<span class="hljs-number">0</span>&amp;&amp;s.charAt(j)!=s.charAt(i))&#123;<br>                j = next[j-<span class="hljs-number">1</span>];<br>            &#125;<br>            <span class="hljs-keyword">if</span>(s.charAt(i)==s.charAt(j))&#123;<br>                j++;<br>            &#125;<br>            next[i] = j;<span class="hljs-comment">//next[i]是当前位置的字符串的最长相同前后缀的长度，因为是长度所以先++之后赋的值。</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">strStr</span><span class="hljs-params">(String haystack, String needle)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(haystack == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">if</span>(needle == <span class="hljs-keyword">null</span>||needle.length()==<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        getNext(needle);<span class="hljs-comment">//获取next数组（前缀数组）</span><br>        <span class="hljs-keyword">int</span> len = needle.length();<br>        <span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;i &lt; haystack.length();i++)&#123;<br>            <span class="hljs-keyword">while</span>(j&gt;<span class="hljs-number">0</span>&amp;&amp;haystack.charAt(i)!=needle.charAt(j))&#123;<br>                j = next[j-<span class="hljs-number">1</span>];<span class="hljs-comment">//当前不匹配时，根据当前元素的前一个元素的next值去直到，当前的i应该继续和匹配串中的哪一个去匹配。</span><br>            &#125;<br>            <span class="hljs-keyword">if</span>(haystack.charAt(i)==needle.charAt(j))&#123;<br>                j++;<span class="hljs-comment">//如果当前值匹配，则继续匹配下一个字符</span><br>            &#125;<br>            <span class="hljs-keyword">if</span>(len==j)&#123;<br>                <span class="hljs-keyword">return</span> i - len + <span class="hljs-number">1</span>;<br>            &#125;      <br>        &#125;<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+<h2 id="基于有限状态机的解法"><a href="#基于有限状态机的解法" class="headerlink" title="基于有限状态机的解法"></a>基于有限状态机的解法</h2><p>主要参考<code>labuladong</code>的算法详解，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/83334559">KMP 算法详解</a></p>
+<p>解题思想主要是将模式串的匹配转换为有限状态机的状态转换，当前状态接收某个字符，然后转到对应的下一个状态，如果进入到最终状态，说明完成了目标串的识别，即完成了匹配。</p>
+<p>例如，识别目标串<code>ABABC</code>，其对应的有限状态机的转换为：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231337412.jpg" srcset="/img/loading.gif" lazyload alt="preview"></p>
+<p>根据状态机，当我们确定两个变量：(当前的匹配状态和遇到的字符)，我们就知道在这个情况下应该转移到那个状态。</p>
+<p>我们使用二维dp数组来描述这个状态转移图：</p>
+<figure class="highlight prolog"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs prolog">dp[j][c] = next<br><span class="hljs-number">0</span> &lt;= j &lt; <span class="hljs-symbol">M</span>，代表当前的状态<br><span class="hljs-number">0</span> &lt;= c &lt; <span class="hljs-number">256</span>，代表遇到的字符（<span class="hljs-symbol">ASCII</span> 码）<br><span class="hljs-number">0</span> &lt;= next &lt;= <span class="hljs-symbol">M</span>，代表下一个状态<br><br>dp[<span class="hljs-number">4</span>][<span class="hljs-string">&#x27;A&#x27;</span>] = <span class="hljs-number">3</span> 表示：<br>当前是状态 <span class="hljs-number">4</span>，如果遇到字符 <span class="hljs-symbol">A</span>，<br>pat 应该转移到状态 <span class="hljs-number">3</span><br><br>dp[<span class="hljs-number">1</span>][<span class="hljs-string">&#x27;B&#x27;</span>] = <span class="hljs-number">2</span> 表示：<br>当前是状态 <span class="hljs-number">1</span>，如果遇到字符 <span class="hljs-symbol">B</span>，<br>pat 应该转移到状态 <span class="hljs-number">2</span><br></code></pre></div></td></tr></table></figure>
+
+<p>根据这个dp数组，我们就可以写出目标串匹配的函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">search</span><span class="hljs-params">(String txt)</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> M = pat.length(); <span class="hljs-comment">//目标串</span><br>    <span class="hljs-keyword">int</span> N = txt.length(); <span class="hljs-comment">//文本串</span><br>    <span class="hljs-comment">// pat 的初始态为 0</span><br>    <span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>        <span class="hljs-comment">// 当前是状态 j，遇到字符 txt[i]，</span><br>        <span class="hljs-comment">// pat 应该转移到哪个状态？</span><br>        j = dp[j][txt.charAt(i)];<br>        <span class="hljs-comment">// 如果达到终止态，返回匹配开头的索引</span><br>        <span class="hljs-keyword">if</span> (j == M) <span class="hljs-keyword">return</span> i - M + <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 没到达终止态，匹配失败</span><br>    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+<p>可以看出，解决问题的核心在于如何根据目标串，得到对应有限状态机的状态转移图。</p>
+<p>定义一个dp数组：</p>
+<figure class="highlight r"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs r"><span class="hljs-keyword">for</span> <span class="hljs-number">0</span> &lt;= j &lt; M: <span class="hljs-comment"># 状态</span><br>    <span class="hljs-keyword">for</span> <span class="hljs-number">0</span> &lt;= <span class="hljs-built_in">c</span> &lt; <span class="hljs-number">256</span>: <span class="hljs-comment"># 字符</span><br>        dp[j][<span class="hljs-built_in">c</span>] = <span class="hljs-keyword">next</span><br></code></pre></div></td></tr></table></figure>
+
+<p>如何知道下一个状态next呢？如果遇到的字符<code>c</code>与<code>pat[j]</code>匹配，则状态应该向前推进，则此时<code>next = j + 1</code>。如果遇到的字符<code>c</code>与<code>pat[j]</code>不匹配呢？此时肯定应该回退到之前的某个状态，并且之前的某个状态已经完成的匹配部分与我们当前已经匹配的过的前面的字符相同。</p>
+<p>这里，我们使用一个叫做<code>影子状态</code>的变量<code>X</code>来表示，<strong>所谓影子状态，就是和当前状态具有相同的前缀</strong>，比如下面这种情况：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231417008.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>当前状态 <code>j = 4</code>，其影子状态为 <code>X = 2</code>，它们都有相同的前缀 “AB”。因为状态 <code>X</code> 和状态 <code>j</code> 存在相同的前缀，所以当状态 <code>j</code> 准备进行状态重启的时候（遇到的字符 <code>c</code> 和 <code>pat[j]</code> 不匹配），可以通过 <code>X</code> 的状态转移图来获得<strong>最近的重启位置</strong>。</p>
+<p>比如说刚才的情况，如果状态 <code>j</code> 遇到一个字符 “A”，应该转移到哪里呢？首先只有遇到 “C” 才能推进状态，遇到 “A” 显然只能进行状态重启。**状态 <code>j</code> 会把这个字符委托给状态 <code>X</code> 处理，也就是 <code>dp[j][&#39;A&#39;] = dp[X][&#39;A&#39;]</code>**：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231419393.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>为什么这样可以呢？因为：既然 <code>j</code> 这边已经确定字符 “A” 无法推进状态，<strong>只能回退</strong>，而且 KMP 就是要<strong>尽可能少的回退</strong>，以免多余的计算。那么 <code>j</code> 就可以去问问和自己具有相同前缀的 <code>X</code>，如果 <code>X</code> 遇见 “A” 可以进行「状态推进」，那就转移过去，因为这样回退最少。<img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231420237.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>当然，如果遇到的字符是 “B”，状态 <code>X</code> 也不能进行「状态推进」，只能回退，<code>j</code> 只要跟着 <code>X</code> 指引的方向回退就行了：<img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201231421140.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>你也许会问，这个 <code>X</code> 怎么知道遇到字符 “B” 要回退到状态 0 呢？因为 <code>X</code> 永远跟在 <code>j</code> 的身后，状态 <code>X</code> 如何转移，在之前就已经算出来了。动态规划算法不就是利用过去的结果解决现在的问题吗？</p>
+<p>而关于影子变量<code>X</code>的更新，其实只需要根据<code>j</code>处接收的字符一同进行状态更新就行了，比如上面的<code>j</code>此时为4状态，<code>j</code>需要接收<code>C</code>前进，此时<code>X</code>也需要转到接收<code>C</code>的下一个状态，这样才能保证<code>X</code>始终与<code>j</code>具有相同的前缀，作为<code>j</code>的影子状态，因此有<code>X = dp[X][pat[j]];</code>。</p>
+<p>最后可以得到构造dp二维数组的函数代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getDp</span><span class="hljs-params">(String s)</span></span>&#123;<br>    <span class="hljs-keyword">int</span> len = s.length();<br>    dp = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[len][<span class="hljs-number">256</span>];<br>    <span class="hljs-keyword">char</span>[] c = s.toCharArray();<br>    dp[<span class="hljs-number">0</span>][c[<span class="hljs-number">0</span>]] = <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">int</span> X = <span class="hljs-number">0</span>;<span class="hljs-comment">//影子标记</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i =<span class="hljs-number">1</span>;i&lt;len;i++)&#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">char</span> cc = <span class="hljs-number">0</span>;cc&lt;<span class="hljs-number">256</span>;cc++)&#123;<br>            dp[i][cc] = dp[X][cc]; <span class="hljs-comment">//将影子状态复制过来</span><br>        &#125;<br>        dp[i][c[i]] = i+<span class="hljs-number">1</span>;<span class="hljs-comment">//更新当前正确匹配字符的下一状态为i+1</span><br>        X = dp[X][c[i]];<span class="hljs-comment">//更新影子状态的下一状态</span><br>    &#125;         <br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>lc-28.实现strStr()</strong></p>
+<p>给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。</p>
+<p>使用状态机的解题代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br><br>    <span class="hljs-keyword">int</span>[][] dp;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getDp</span><span class="hljs-params">(String s)</span></span>&#123;<br>        <span class="hljs-keyword">int</span> len = s.length();<br>        dp = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[len][<span class="hljs-number">256</span>];<br>        <span class="hljs-keyword">char</span>[] c = s.toCharArray();<br>        dp[<span class="hljs-number">0</span>][c[<span class="hljs-number">0</span>]] = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">int</span> X = <span class="hljs-number">0</span>;<span class="hljs-comment">//影子标记</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i =<span class="hljs-number">1</span>;i&lt;len;i++)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">char</span> cc = <span class="hljs-number">0</span>;cc&lt;<span class="hljs-number">256</span>;cc++)&#123;<br>                dp[i][cc] = dp[X][cc];<br>            &#125;<br>            dp[i][c[i]] = i+<span class="hljs-number">1</span>;<br>            X = dp[X][c[i]];<br>        &#125;         <br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">strStr</span><span class="hljs-params">(String haystack, String needle)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(haystack == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">if</span>(needle == <span class="hljs-keyword">null</span>||needle.length()==<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        getDp(needle);<span class="hljs-comment">//获取next数组（前缀数组）</span><br>        <span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">char</span>[] haystacks = haystack.toCharArray();<br>        <span class="hljs-keyword">char</span>[] needles = needle.toCharArray();<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;i&lt;haystack.length();i++)&#123;<br>            j = dp[j][haystacks[i]];<br>            <span class="hljs-keyword">if</span>(j==needles.length)&#123;<br>                <span class="hljs-keyword">return</span> i -needles.length + <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>     <br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E5%88%B7%E9%A2%98/">算法与刷题</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+              </div>
+              <!-- 
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+               -->
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">ziyikee</a> <br>
+                <strong>本文链接: </strong><a href="/2022/01/22/KMP%E7%AE%97%E6%B3%95/">https://ziyikee.fun/2022/01/22/KMP%E7%AE%97%E6%B3%95/</a> <br>
+                <!-- <strong>本文链接: </strong><a href="{{ url_for(page.path) }}" title="{{ page.title }}">{{ page.permalink }}</a> -->
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/08/JVM-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+                        <span class="hidden-mobile">JVM-垃圾回收</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","appKey":"mkp5UxNkruz1T9ByVFewLjOi","path":"window.location.pathname","placeholder":"嘿嘿，说两句吧","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://yax4vgrj.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":null},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="javascript:" rel="nofollow noopener"><span>zyk的小破站</span></a> <i class="iconfont icon-love"></i> <a href="javascript:" rel="nofollow noopener"><span>Blog by ziyikee</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        冀ICP备2021024422号
+      </a>
+    </span>
+    
+  </div>
+
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'G-TKFRYZGQQM', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/timeDate.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
