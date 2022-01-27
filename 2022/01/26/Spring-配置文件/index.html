@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201262041801.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201262045415.png">
 <meta property="article:published_time" content="2022-01-26T09:35:50.000Z">
-<meta property="article:modified_time" content="2022-01-26T13:56:27.286Z">
+<meta property="article:modified_time" content="2022-01-27T07:41:03.370Z">
 <meta property="article:author" content="ziyikee">
 <meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary_large_image">
@@ -288,7 +288,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年1月26日 晚上
+                  本文最后更新于：2022年1月27日 下午
                 
               </p>
             
@@ -310,13 +310,16 @@
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">BeanFactory beanFactory = <span class="hljs-keyword">new</span> XmlBeanFactory(<span class="hljs-keyword">new</span> FileSystemResource(<span class="hljs-string">&quot;D:\\WorkSpace\\Spring\\src\\main\\resources\\applicationContext.xml&quot;</span>));<br></code></pre></div></td></tr></table></figure></li>
 <li><p>ApplicationContext接口及其相关类</p>
 <p>ApplicationContext接口提供高级功能的容器，基本功能与BeanFactory很相似，但还可以提供一些高级功能。</p>
-<p>ApplicationContext接口的常用实现类有以下3个：</p>
+<p>ApplicationContext接口的常用实现类有以下几个：</p>
 <ul>
 <li><p>FileSystemXmlApplicationContext：从<strong>文件系统</strong>中的XML文件中加载上下文中定义的信息，需要使用系统文件路径，如<code>D:\\applicationContext.xml</code>,并且只能在指定的路径中查询。</p>
 </li>
 <li><p>ClassPathXmlApplicationContext：从类路径中的XML文件中加载上下文中定义的信息，把上下文定义的文件当成类路径资源，此时applicationContext.xml文件位于项目的src目录下，如：</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">ApplicationContext applicationContext = <span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">&quot;applicationContext.xml&quot;</span>);<br></code></pre></div></td></tr></table></figure></li>
 <li><p>XmlWebApplicationContext：从Web系统中的XML文件加载上下文中定义的信息。</p>
+</li>
+<li><p>AnnotationConfigApplicationContext</p>
+<p>当使用注解配置容器对象时，需要使用此类来创建Spring容器，它用来读取注解。</p>
 </li>
 </ul>
 </li>
@@ -487,6 +490,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/01/26/Spring-%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spring-依赖注入</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
