@@ -1,0 +1,733 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com.css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel = "stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131435626.png">
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201131435626.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="HUST-操作系统课程设计">
+  <meta name="author" content="ziyikee">
+  <meta name="keywords" content="java">
+  <meta name="description" content="HUST-操作系统课程设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HUST-OS课设">
+<meta property="og:url" content="https://ziyikee.fun/2022/01/28/HUST-OS%E8%AF%BE%E8%AE%BE/index.html">
+<meta property="og:site_name" content="Blog by ziyikee">
+<meta property="og:description" content="HUST-操作系统课程设计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201281742008.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282306621.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282142587.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282313606.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282332406.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282323966.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282326513.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282028362.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282227805.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282232319.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282300499.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201291731425.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201291755630.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201292006753.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201292008917.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201292010859.png">
+<meta property="article:published_time" content="2022-01-28T09:38:27.000Z">
+<meta property="article:modified_time" content="2022-01-29T12:12:16.497Z">
+<meta property="article:author" content="ziyikee">
+<meta property="article:tag" content="HUST">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201281742008.png">
+  
+  <title>HUST-OS课设 - Blog by ziyikee</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ziyikee.fun","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"<-","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"41fc030db57d5570dd22f78997dc4a7e","google":"G-TKFRYZGQQM","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","app_key":"mkp5UxNkruz1T9ByVFewLjOi","server_url":"https://yax4vgrj.lc-cn-n1-shared.com","path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 80vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Blog by ziyikee.</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/a1.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="HUST-OS课设">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      ziyikee
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-01-28 17:38" pubdate>
+        2022年1月28日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">HUST-OS课设</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年1月29日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="HUST-操作系统课程设计"><a href="#HUST-操作系统课程设计" class="headerlink" title="HUST-操作系统课程设计"></a>HUST-操作系统课程设计</h1><h2 id="任务一"><a href="#任务一" class="headerlink" title="任务一"></a>任务一</h2><p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201281742008.png" srcset="/img/loading.gif" lazyload alt="image-20220128174233995"></p>
+<h3 id="主要参考"><a href="#主要参考" class="headerlink" title="主要参考"></a>主要参考</h3><p>《Orange’S：一个操作系统的实现》<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37422196/article/details/81840274">电子版</a>，老师给的是旧版，内容差太多了，离谱。</p>
+<h3 id="环境配置：Ubuntu-NASM-Bochs-freedos"><a href="#环境配置：Ubuntu-NASM-Bochs-freedos" class="headerlink" title="环境配置：Ubuntu+NASM+Bochs+freedos"></a>环境配置：Ubuntu+NASM+Bochs+freedos</h3><h4 id="VMware安装Ubuntu虚拟机"><a href="#VMware安装Ubuntu虚拟机" class="headerlink" title="VMware安装Ubuntu虚拟机:"></a>VMware安装Ubuntu虚拟机:</h4><p>官网下载即可。</p>
+<h4 id="安装NASM："><a href="#安装NASM：" class="headerlink" title="安装NASM："></a>安装NASM：</h4><figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">apt install nasm<br></code></pre></div></td></tr></table></figure>
+
+<h4 id="Bochs环境安装与测试："><a href="#Bochs环境安装与测试：" class="headerlink" title="Bochs环境安装与测试："></a>Bochs环境安装与测试：</h4><p>跟之前的实验差不多。</p>
+<ul>
+<li><p>1.安装Bochs：</p>
+<ul>
+<li><p>方法一：不推荐，安装的bochs没有功能选项的显示</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs mipsasm">sudo apt-get <span class="hljs-keyword">install </span>vgabios <span class="hljs-keyword">bochs </span><span class="hljs-keyword">bochs-x </span><span class="hljs-keyword">bximage</span><br></code></pre></div></td></tr></table></figure></li>
+<li><p>方法二：官网下载压缩包，下载链接：<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/bochs/files/bochs/2.7/">Bochs x86 </a>,接下来的过程可能会出各种各样的问题，有些问题在下面的<strong>遇到问题</strong>中有描述</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs jboss-cli"><span class="hljs-string">//</span>解压<br>tar xvf bochs-2.7.tar.gz<br><br><span class="hljs-string">//</span>进入解压目录<br><span class="hljs-keyword">cd</span> bochs-2.7<br><br><span class="hljs-string">//</span>执行,下面的命令需要gcc环境，若没有，则apt安装，建议用下面的详细版<br><span class="hljs-string">./configure</span> <span class="hljs-params">--enable-debugger</span> <span class="hljs-params">--enable-disasm</span><br><br><span class="hljs-string">//</span>详细版的，出现的问题少一些<br><span class="hljs-string">./configure</span> <span class="hljs-params">--with-x11</span> <span class="hljs-params">--with-wx</span> <span class="hljs-params">--enable-debugger</span> <span class="hljs-params">--enable-disasm</span> <span class="hljs-params">--enable-all-optimizations</span> <span class="hljs-params">--enable-readline</span> <span class="hljs-params">--enable-long-phy-address</span> <span class="hljs-params">--enable-ltdl-install</span> <span class="hljs-params">--enable-idle-hack</span> <span class="hljs-params">--enable-plugins</span> <span class="hljs-params">--enable-a20-pin</span> <span class="hljs-params">--enable-x86-64</span> <span class="hljs-params">--enable-smp</span> <span class="hljs-params">--enable-cpu-level=6</span> <span class="hljs-params">--enable-large-ramfile</span> <span class="hljs-params">--enable-repeat-speedups</span> <span class="hljs-params">--enable-fast-function-calls</span>  <span class="hljs-params">--enable-handlers-chaining</span>  <span class="hljs-params">--enable-trace-linking</span> <span class="hljs-params">--enable-configurable-msrs</span> <span class="hljs-params">--enable-show-ips</span>  <span class="hljs-params">--enable-debugger-gui</span> <span class="hljs-params">--enable-iodebug</span> <span class="hljs-params">--enable-logging</span> <span class="hljs-params">--enable-assert-checks</span> <span class="hljs-params">--enable-fpu</span> <span class="hljs-params">--enable-vmx=2</span> <span class="hljs-params">--enable-svm</span> <span class="hljs-params">--enable-3dnow</span> <span class="hljs-params">--enable-alignment-check</span>  <span class="hljs-params">--enable-monitor-mwait</span> <span class="hljs-params">--enable-avx</span>  <span class="hljs-params">--enable-evex</span> <span class="hljs-params">--enable-x86-debugger</span> <span class="hljs-params">--enable-pci</span> <span class="hljs-params">--enable-usb</span> <span class="hljs-params">--enable-voodoo</span><br><br><span class="hljs-string">//</span>缺少什么包就去安装<br>make<br><br>sudo make install<br><span class="hljs-string">//</span>执行，检测是否安装成功<br>bochs<br></code></pre></div></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282306621.png" srcset="/img/loading.gif" lazyload alt="image-20220128230636528"></p>
+</li>
+</ul>
+</li>
+<li><p>2.创建boot.asm</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs asm">	org	07c00h			; 告诉编译器程序加载到7c00处<br>	mov	ax, cs<br>	mov	ds, ax<br>	mov	es, ax<br>	call	DispStr			; 调用显示字符串例程<br>	jmp	$			; 无限循环<br>DispStr:<br>	mov	ax, BootMessage<br>	mov	bp, ax			; ES:BP = 串地址<br>	mov	cx, 16			; CX = 串长度<br>	mov	ax, 01301h		; AH = 13,  AL = 01h<br>	mov	bx, 000ch		; 页号为0(BH = 0) 黑底红字(BL = 0Ch,高亮)<br>	mov	dl, 0<br>	int	10h			; 10h 号中断<br>	ret<br>BootMessage:		db	&quot;Hello, OS world!&quot;<br>times 	510-($-$$)	db	0	; 填充剩下的空间，使生成的二进制代码恰好为512字节<br>dw 	0xaa55				; 结束标志<br></code></pre></div></td></tr></table></figure>
+
+<ul>
+<li>3.使用nasm编译asm文件</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">nasm boot.asm -o boot.bin<br></code></pre></div></td></tr></table></figure>
+
+<ul>
+<li><p>4.执行命令<code>bximage</code>，生成一个虚拟软盘</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282142587.png" srcset="/img/loading.gif" lazyload alt="image-20220128214250650"></p>
+</li>
+<li><p>5.将bin文件写入img中</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc<br></code></pre></div></td></tr></table></figure>
+
+<ul>
+<li>6.编写bochs的配置文件<code>bochsrc</code>，文件内容如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs txt">###############################################################<br># Configuration file for Bochs<br>###############################################################<br><br># how much memory the emulated machine will have<br>megs: 32<br><br># filename of ROM images 需要根据自己本机的路径设置<br>romimage: file=/usr/os/bochs-2.7/bios/BIOS-bochs-latest<br>vgaromimage: file=/usr/os/bochs-2.7/bios/VGABIOS-lgpl-latest<br><br># what disk images will be used <br>floppya: 1_44=a.img, status=inserted<br><br># choose the boot disk.<br>boot: floppy<br><br># where do we send log messages?<br>log: bochsout.txt<br><br># disable the mouse<br>mouse: enabled=0<br>#书中所给的keyboard配置删掉<br></code></pre></div></td></tr></table></figure>
+
+<ul>
+<li><p>7.执行<code>bochs -f bochsrc</code>，将弹出黑色窗口，之后输入<code>6</code>，选择功能6，再输入<code>c</code>，此时执行引导程序，结果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282313606.png" srcset="/img/loading.gif" lazyload alt="image-20220128231345001"></p>
+</li>
+</ul>
+<h4 id="Bochs中配置freedos："><a href="#Bochs中配置freedos：" class="headerlink" title="Bochs中配置freedos："></a>Bochs中配置freedos：</h4><p>freedos主要用于提供保护模式下的程序的运行环境，用于运行COM文件。参考链接：<a target="_blank" rel="noopener" href="https://fanlumaster.github.io/2021/06/13/bochs-%E5%88%A9%E7%94%A8-freedos-%E6%90%AD%E5%BB%BA%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/">Fan Lu’s Blog (fanlumaster.github.io)</a></p>
+<ul>
+<li><p>1.下载freedos压缩包，直接执行命令<code>wget http://bochs.sourceforge.net/guestos/freedos-img.tar.gz</code>，下载完成后解压即可。</p>
+</li>
+<li><p>2.进入解压的freedos目录，可以看到存在几个img文件，将其中的<code>a.img</code>改名为<code>freedos.img</code>，并复制到你的工作目录下(就是你写asm的目录)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282332406.png" srcset="/img/loading.gif" lazyload alt="image-20220128233224263"></p>
+</li>
+<li><p>3.使用<code>bximage</code>新建一个软盘，名字叫<code>pm.img</code></p>
+</li>
+<li><p>4.编写bochsrc配置文件，文件内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">megs:128<br><span class="hljs-comment">#模拟器的内存  </span><br><br><span class="hljs-comment">#下面这两个路径需要自己去看一下对应路径下是否真的有这两个文件，防止路径出错</span><br>romimage:file=/usr/os/bochs-2.7/bios/BIOS-bochs-latest<br><span class="hljs-comment">#这个是BIOS-bochs-latest的路径，可能不一样</span><br>vgaromimage:file=/usr/os/bochs-2.7/bios/VGABIOS-lgpl-latest<br><span class="hljs-comment">#注意，这是a</span><br>floppya:1_44=freedos.img,status=inserted<br><span class="hljs-comment">#注意，这是b。。有人会愚蠢的分不清。。</span><br>floppyb:1_44=pm.img,status=inserted<br><span class="hljs-comment">#这个是启动软盘,在当前目录下，如果不在当前目录，需要指明路径  </span><br><br>boot:a<br><span class="hljs-comment">#表示从软盘启动</span><br><br><span class="hljs-built_in">log</span>:bochsout.txt<br><span class="hljs-comment">#日志输出文件</span><br><br>mouse: enabled=0<br><span class="hljs-comment">#disable the mouse</span><br><br></code></pre></div></td></tr></table></figure></li>
+<li><p>5.启动bochs，命令还是<code>bochs -f bochsrc</code>，依然是选择功能6，弹出黑色窗口，然后输入c，这时候我们可以发现，他运行了<code>freedos.img</code>的引导程序，黑色窗口中进入了<code>A:\&gt;</code>的命令行，注意此时，我们的<code>pm.img</code>是空的，没有向其中写入程序，接着在<code>A:\&gt;</code>的命令行中执行命令<code>format.exe b:</code>，来格式化B盘。</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282323966.png" srcset="/img/loading.gif" lazyload alt="image-20220128232306646"></p>
+<ul>
+<li><p>6.接下来尝试在pm.img中写入程序，并且该程序可从实模式转到保护模式，在保护模式下，打印一个字符，<code>pmtest1.asm</code>代码如下(参考书源代码)，具体代码实现含义在书中有解释，可仔细阅读，<code>pm.inc</code>为直接复制光盘中的源代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs asm">; ==========================================<br>; pmtest1.asm<br>; 编译方法：nasm pmtest1.asm -o pmtest1.com<br>; ==========================================<br><br>%include	&quot;pm.inc&quot;	; 常量, 宏, 以及一些说明<br><br>org	0100h<br>	jmp	LABEL_BEGIN<br><br>[SECTION .gdt]<br>; GDT<br>;                                         段基址,      段界限     , 属性<br>LABEL_GDT:		Descriptor	       0,                0, 0     	; 空描述符<br>LABEL_DESC_CODE32:	Descriptor	       0, SegCode32Len - 1, DA_C + DA_32; 非一致代码段, 32<br>LABEL_DESC_VIDEO:	Descriptor	 0B8000h,           0ffffh, DA_DRW	; 显存首地址<br>; GDT 结束<br><br>GdtLen		equ	$ - LABEL_GDT	; GDT长度<br>GdtPtr		dw	GdtLen - 1	; GDT界限<br>		dd	0		; GDT基地址<br><br>; GDT 选择子<br>SelectorCode32		equ	LABEL_DESC_CODE32	- LABEL_GDT<br>SelectorVideo		equ	LABEL_DESC_VIDEO	- LABEL_GDT<br>; END of [SECTION .gdt]<br><br>[SECTION .s16]<br>[BITS	16]<br>LABEL_BEGIN:<br>	mov	ax, cs<br>	mov	ds, ax<br>	mov	es, ax<br>	mov	ss, ax<br>	mov	sp, 0100h<br><br>	; 初始化 32 位代码段描述符<br>	xor	eax, eax<br>	mov	ax, cs<br>	shl	eax, 4<br>	add	eax, LABEL_SEG_CODE32<br>	mov	word [LABEL_DESC_CODE32 + 2], ax<br>	shr	eax, 16<br>	mov	byte [LABEL_DESC_CODE32 + 4], al<br>	mov	byte [LABEL_DESC_CODE32 + 7], ah<br><br>	; 为加载 GDTR 作准备<br>	xor	eax, eax<br>	mov	ax, ds<br>	shl	eax, 4<br>	add	eax, LABEL_GDT		; eax &lt;- gdt 基地址<br>	mov	dword [GdtPtr + 2], eax	; [GdtPtr + 2] &lt;- gdt 基地址<br><br>	; 加载 GDTR<br>	lgdt	[GdtPtr]<br><br>	; 关中断<br>	cli<br><br>	; 打开地址线A20<br>	in	al, 92h<br>	or	al, 00000010b<br>	out	92h, al<br><br>	; 准备切换到保护模式<br>	mov	eax, cr0<br>	or	eax, 1<br>	mov	cr0, eax<br><br>	; 真正进入保护模式<br>	jmp	dword SelectorCode32:0	; 执行这一句会把 SelectorCode32 装入 cs, 并跳转到 Code32Selector:0  处<br>; END of [SECTION .s16]<br><br><br>[SECTION .s32]; 32 位代码段. 由实模式跳入.<br>[BITS	32]<br><br>LABEL_SEG_CODE32:<br>	mov	ax, SelectorVideo<br>	mov	gs, ax			; 视频段选择子(目的)<br><br>	mov	edi, (80 * 10 + 0) * 2	; 屏幕第 10 行, 第 0 列。<br>	mov	ah, 0Ch			; 0000: 黑底    1100: 红字<br>	mov	al, &#x27;z&#x27;<br>	mov	[gs:edi], ax<br><br>	; 到此停止<br>	jmp	$<br><br>SegCode32Len	equ	$ - LABEL_SEG_CODE32<br>; END of [SECTION .s32]<br><br></code></pre></div></td></tr></table></figure></li>
+<li><p>7.使用命令<code>nasm pmtest1.asm -o pmtest1.com</code>，将asm文件编译成com程序。</p>
+</li>
+<li><p>8.将<code>pmtest1.com</code>文件复制到pm.img上，若是首次复制，则需先创建一个目录：</p>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">sudo mkdir <span class="hljs-regexp">/mnt/</span>floppy<br></code></pre></div></td></tr></table></figure>
+
+<p>随后执行以下命令：</p>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">sudo mount -o loop pm.img <span class="hljs-regexp">/mnt/</span>floppy<br>sudo cp pmtest1.com <span class="hljs-regexp">/mnt/</span>floppy/<br>sudo umount <span class="hljs-regexp">/mnt/</span>floppy<br></code></pre></div></td></tr></table></figure></li>
+<li><p>再次启动bochs，并进入到freedos中，在<code>A:\&gt;</code>命令行中执行<code>B:\pmtest1.com</code>，此时<code>pmtest1.com</code>，程序便运行起来了，完成了GDT表的初始化，实模式转换到保护模式，在保护模式下输出字符<code>z</code>，执行结果如下：</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282326513.png" srcset="/img/loading.gif" lazyload alt="image-20220128232637635"></p>
+<div class="note note-success">
+            <p>至此，基本环境算是打起来了，中间遇到了太多的问题，花了一整天的时间😭😭</p>
+          </div>
+
+<h4 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h4><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/oasisyang/archive/2021/09/30/15358137.html">bochs配置安装 </a>,只记录了这几个，中间问题太多不想写了。</p>
+<ul>
+<li><p>Message: dlopen failed for <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=module&spm=1001.2101.3001.7020">module</a> ‘x’: file not found</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282028362.png" srcset="/img/loading.gif" lazyload alt="image-20220128202825748"></p>
+</li>
+</ul>
+<p>​    原因：没有安装<code>bochs-x</code></p>
+<p>​    解决方法：<code>apt-get install bochs-x</code></p>
+<ul>
+<li><p><code>./configure --enable-debugger --enable-disasm</code>执行出错</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282227805.png" srcset="/img/loading.gif" lazyload alt="image-20220128222707346"></p>
+</li>
+</ul>
+<p>​    原因：缺少相应的包</p>
+<p>​    解决方法：<code>sudo apt-get install build-essential</code></p>
+<ul>
+<li><p>make出错</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282232319.png" srcset="/img/loading.gif" lazyload alt="image-20220128223202133"></p>
+</li>
+</ul>
+<p>​    解决方法：下面三句几乎将所有需要的都安装了</p>
+<figure class="highlight routeros"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs routeros">sudo apt-<span class="hljs-builtin-name">get</span> install build-essential<br>sudo apt-<span class="hljs-builtin-name">get</span> install xorg-dev<br>sudo apt-<span class="hljs-builtin-name">get</span> install libgtk2.0-dev<br></code></pre></div></td></tr></table></figure>
+
+<ul>
+<li>make install出错</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201282300499.png" srcset="/img/loading.gif" lazyload alt="image-20220128230032093"></p>
+<p>​    解决方法：<code>vim .bochsrc</code>，删除第955行</p>
+<h3 id="GDT"><a href="#GDT" class="headerlink" title="GDT"></a>GDT</h3><p>在IA32下，CPU有两种工作模式，实模式和保护模式，当启动计算后，刚开始是实模式，随后经过某种机制，进入到保护模式。</p>
+<p>Intel8086是16位的CPU，有16位的寄存器，16位的数据总线以及20位的地址总线，所以有1MB的寻址能力，在寻址时，分别用两个16位寄存器保存段基址和段偏移，<code>物理地址=段基址*16+段偏移</code>，以此来达到1MB的寻址空间。</p>
+<p>从80386开始，Intel的CPU的地址线变为32位，寻址空间变为4GB，但是依然使用的是16位寄存器，显然使用段基址加段偏移的方法，是无法达到4GB的寻址空间的。此时我们改变了段的含义，在保护模式下，段基地址依然使用16位寄存器来保存，只不过这里的段基地址并不对应具体段在内存中的基地址，而是作为一个索引，指向了某个数据结构中的一个表项(数据项)，这个表项的内容详细定义了这个端的起始地址，界限，属性等内容，这个数据结构就叫做GDT(<code>Global Descriptor Table</code>，全局描述表，其实就是我们所说的段表)，GDT中的每一个表项叫做一个Descriptor(描述符)，存储量某个段的信息，一个描述符就对应一个段，可以使数据段，代码段等等。</p>
+<p>所以，GDT的作用就是用来提供段式存储机制，这种机制是通过段寄存器(他存储的地址指向段表中某个段的描述符)和GDT中的描述符共同提供的。</p>
+<p>每个描述的内部结构：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201291731425.png" srcset="/img/loading.gif" lazyload alt="image-20220129173123365"></p>
+<p>比如看下面的代码就是GDT的内容，里面有3个描述符，表示3个段(第一个描述符是空描述符，实际只存储了两个段，CODE段和VIDEO段，每个描述符里记录了这个段的段基址，段界限和属性)</p>
+<figure class="highlight llvm"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs llvm">[SECTION .gdt]<br><span class="hljs-comment">;Descriptor是一个数据结构，在pm.inc中定义了，大小是8字节</span><br><span class="hljs-comment">; GDT,是一个数组，包括三个Descriptor,每一个描述符定义一个段</span><br><span class="hljs-comment">;                              段基址,       段界限     , 属性</span><br>LABEL_GDT:	   Descriptor       <span class="hljs-number">0</span><span class="hljs-punctuation">,</span>                <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span>           <span class="hljs-comment">; 空描述符</span><br>LABEL_DESC_CODE<span class="hljs-number">32</span>: Descriptor       <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> SegCode<span class="hljs-number">32</span>Len - <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> DA_C + DA_<span class="hljs-number">32</span><span class="hljs-comment">; 非一致代码段</span><br>LABEL_DESC_VIDEO:  Descriptor <span class="hljs-number">0</span>B<span class="hljs-number">8000</span>h<span class="hljs-punctuation">,</span>           <span class="hljs-number">0</span>ffffh<span class="hljs-punctuation">,</span> DA_DRW	     <span class="hljs-comment">; 显存首地址为0B8000H</span><br><span class="hljs-comment">; GDT 结束</span><br><span class="hljs-comment">;GdtLen表示GDT的长度，通过下面的减法计算出来</span><br>GdtLen		equ	$ - LABEL_GDT	<span class="hljs-comment">; GDT长度</span><br><span class="hljs-comment">;Gdtptr也是一个数据结构，可以看出大小是6字节，后4字节dd，是GDT的基址</span><br>GdtPtr		dw	GdtLen - <span class="hljs-number">1</span>	<span class="hljs-comment">; GDT界限</span><br>		dd	<span class="hljs-number">0</span>		<span class="hljs-comment">; GDT基地址</span><br></code></pre></div></td></tr></table></figure>
+
+<p>现在我们知道了，每个段的基地址等信息保存在GDT表中，那么我们怎么知道我们当前段的描述符在GDT表中的位置呢，这时候，就用到了一个叫做<strong>选择子</strong>数据结构，来告诉我们段描述符在GDT表中的位置，如下：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs armasm"><span class="hljs-comment">; GDT 选择子</span><br><span class="hljs-symbol">SelectorCode32</span>		<span class="hljs-meta">equ</span>	LABEL_DESC_CODE32	- LABEL_GDT<br><span class="hljs-symbol">SelectorVideo</span>		<span class="hljs-meta">equ</span>	LABEL_DESC_VIDEO	- LABEL_GDT<br></code></pre></div></td></tr></table></figure>
+
+<p>这两个变量就分别保存了code段和video段在GDT表中的偏移，根据这两个选择子，就可以找到段在GDT中的描述符。(具体到底怎么用，我很懵逼)。</p>
+<p><strong>总之，我们得到逻辑地址后，首先将段地址作为索引，找到该段在GDT表中的描述符，然后得知该段在内存中的真实的段基地址，然后再根据偏移地址，就可以找到物理地址了</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201291755630.png" srcset="/img/loading.gif" lazyload alt="image-20220129175526290"></p>
+<h4 id="chapter3-b-pmtest2-asm尝试"><a href="#chapter3-b-pmtest2-asm尝试" class="headerlink" title="chapter3/b/pmtest2.asm尝试"></a>chapter3/b/pmtest2.asm尝试</h4><p>代码复制粘贴就行了😆😆😆</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201292006753.png" srcset="/img/loading.gif" lazyload alt="image-20220129200612154"></p>
+<p>bochsrc中的路径需要改成自己的，Makefile中遇到了问题：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201292008917.png" srcset="/img/loading.gif" lazyload alt="image-20220129200758402"></p>
+<p>解决方法：参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/judyge/article/details/52346963">sudo mount -o loop pm.img /mnt/floppy/mount 错误解决办法</a></p>
+<p>之后<code>make</code>，然后进入bochs和freedos，运行<code>B:\pm.img</code>，成功~：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ziyikee/blog_img/blog_img/202201292010859.png" srcset="/img/loading.gif" lazyload alt="image-20220129201004351"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/OS/">OS</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/HUST/">HUST</a>
+                    
+                      <a class="hover-with-bg" href="/tags/OS/">OS</a>
+                    
+                  </div>
+                
+              </div>
+              <!-- 
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+               -->
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">ziyikee</a> <br>
+                <strong>本文链接: </strong><a href="/2022/01/28/HUST-OS%E8%AF%BE%E8%AE%BE/">https://ziyikee.fun/2022/01/28/HUST-OS%E8%AF%BE%E8%AE%BE/</a> <br>
+                <!-- <strong>本文链接: </strong><a href="{{ url_for(page.path) }}" title="{{ page.title }}">{{ page.permalink }}</a> -->
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Yax4VGrJCLUimOwWC0IUwUBl-gzGzoHsz","appKey":"mkp5UxNkruz1T9ByVFewLjOi","path":"window.location.pathname","placeholder":"嘿嘿，说两句吧","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://yax4vgrj.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":null},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="javascript:" rel="nofollow noopener"><span>zyk的小破站</span></a> <i class="iconfont icon-love"></i> <a href="javascript:" rel="nofollow noopener"><span>Blog by ziyikee</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        冀ICP备2021024422号
+      </a>
+    </span>
+    
+  </div>
+
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'G-TKFRYZGQQM', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/timeDate.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
